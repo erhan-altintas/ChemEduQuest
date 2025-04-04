@@ -16,133 +16,148 @@
     <link rel="stylesheet" href="/css/global_vars.css" />
     <link rel="stylesheet" href="/css/main.css" />
     <link href="index.css" rel="stylesheet" />
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        text-align: center;
-        background-color: #f4f4f4;
-      }
-      h1 {
-        margin-top: 20px;
-      }
-      .image-container img {
-        max-width: 90%;
-        height: auto;
-        border: 2px solid #000;
-        border-radius: 10px;
-        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
-        margin-bottom: 20px;
-      }
-      .container {
-        display: grid;
-        grid-template-columns: repeat(18, 1fr);
-        gap: 5px;
-        max-width: 1200px;
-        margin: auto;
-        padding: 10px;
-      }
-      .element {
-        width: 60px;
-        height: 60px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        background-color: #fff;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        text-align: center;
-        font-size: 14px;
-        font-weight: bold;
-        line-height: 1.2;
-      }
-      .empty {
-        visibility: hidden;
-      }
-    </style>
   </head>
   <body>
+    <h1>Periodic Table of the Elements</h1>
+
+    <!-- Main Periodic Table -->
     <div class="container">
-      <div class="element">1<br />H</div>
+      <div class="nietMetalen element">1<br />H</div>
       <div class="empty" style="grid-column: 2 / span 16"></div>
-      <div class="element">2<br />He</div>
+      <div class="Edelgassen element">2<br />He</div>
 
-      <div class="element">3<br />Li</div>
-      <div class="element">4<br />Be</div>
+      <div class="alkaliMetalen element">3<br />Li</div>
+      <div class="aardAlkaliMetalen element">4<br />Be</div>
       <div class="empty" style="grid-column: 3 / span 10"></div>
-      <div class="element">5<br />B</div>
-      <div class="element">6<br />C</div>
-      <div class="element">7<br />N</div>
-      <div class="element">8<br />O</div>
-      <div class="element">9<br />F</div>
-      <div class="element">10<br />Ne</div>
+      <div class="semiMetalen element">5<br />B</div>
+      <div class="nietMetalen element">6<br />C</div>
+      <div class="nietMetalen element">7<br />N</div>
+      <div class="nietMetalen element">8<br />O</div>
+      <div class="Halogenen element">9<br />F</div>
+      <div class="Edelgassen element">10<br />Ne</div>
 
-      <div class="element">11<br />Na</div>
-      <div class="element">12<br />Mg</div>
+      <div class="alkaliMetalen element">11<br />Na</div>
+      <div class="aardAlkaliMetalen element">12<br />Mg</div>
       <div class="empty" style="grid-column: 3 / span 10"></div>
-      <div class="element">13<br />Al</div>
-      <div class="element">14<br />Si</div>
-      <div class="element">15<br />P</div>
-      <div class="element">16<br />S</div>
-      <div class="element">17<br />Cl</div>
-      <div class="element">18<br />Ar</div>
+      <div class="basisMetalen element">13<br />Al</div>
+      <div class="semiMetalen element">14<br />Si</div>
+      <div class="nietMetalen element">15<br />P</div>
+      <div class="nietMetalen element">16<br />S</div>
+      <div class="Halogenen element">17<br />Cl</div>
+      <div class="Edelgassen element">18<br />Ar</div>
 
-      <div class="element">19<br />K</div>
-      <div class="element">20<br />Ca</div>
-      <div class="element">21<br />Sc</div>
-      <div class="element">22<br />Ti</div>
-      <div class="element">23<br />V</div>
-      <div class="element">24<br />Cr</div>
-      <div class="element">25<br />Mn</div>
-      <div class="element">26<br />Fe</div>
-      <div class="element">27<br />Co</div>
-      <div class="element">28<br />Ni</div>
-      <div class="element">29<br />Cu</div>
-      <div class="element">30<br />Zn</div>
-      <div class="element">31<br />Ga</div>
-      <div class="element">32<br />Ge</div>
-      <div class="element">33<br />As</div>
-      <div class="element">34<br />Se</div>
-      <div class="element">35<br />Br</div>
-      <div class="element">36<br />Kr</div>
+      <div class="alkaliMetalen element">19<br />K</div>
+      <div class="aardAlkaliMetalen element">20<br />Ca</div>
+      <div class="overggangsMetalen element">21<br />Sc</div>
+      <div class="overggangsMetalen element">22<br />Ti</div>
+      <div class="overggangsMetalen element">23<br />V</div>
+      <div class="overggangsMetalen element">24<br />Cr</div>
+      <div class="overggangsMetalen element">25<br />Mn</div>
+      <div class="overggangsMetalen element">26<br />Fe</div>
+      <div class="overggangsMetalen element">27<br />Co</div>
+      <div class="overggangsMetalen element">28<br />Ni</div>
+      <div class="overggangsMetalen element">29<br />Cu</div>
+      <div class="overggangsMetalen element">30<br />Zn</div>
+      <div class="basisMetalen element">31<br />Ga</div>
+      <div class="semiMetalen element">32<br />Ge</div>
+      <div class="semiMetalen element">33<br />As</div>
+      <div class="nietMetalen element">34<br />Se</div>
+      <div class="Halogenen element">35<br />Br</div>
+      <div class="Edelgassen element">36<br />Kr</div>
 
-      <div class="element">37<br />Rb</div>
-      <div class="element">38<br />Sr</div>
-      <div class="element">39<br />Y</div>
-      <div class="element">40<br />Zr</div>
-      <div class="element">41<br />Nb</div>
-      <div class="element">42<br />Mo</div>
-      <div class="element">43<br />Tc</div>
-      <div class="element">44<br />Ru</div>
-      <div class="element">45<br />Rh</div>
-      <div class="element">46<br />Pd</div>
-      <div class="element">47<br />Ag</div>
-      <div class="element">48<br />Cd</div>
-      <div class="element">49<br />In</div>
-      <div class="element">50<br />Sn</div>
-      <div class="element">51<br />Sb</div>
-      <div class="element">52<br />Te</div>
-      <div class="element">53<br />I</div>
-      <div class="element">54<br />Xe</div>
+      <div class="alkaliMetalen element">37<br />Rb</div>
+      <div class="aardAlkaliMetalen element">38<br />Sr</div>
+      <div class="overggangsMetalen element">39<br />Y</div>
+      <div class="overggangsMetalen element">40<br />Zr</div>
+      <div class="overggangsMetalen element">41<br />Nb</div>
+      <div class="overggangsMetalen element">42<br />Mo</div>
+      <div class="overggangsMetalen element">43<br />Tc</div>
+      <div class="overggangsMetalen element">44<br />Ru</div>
+      <div class="overggangsMetalen element">45<br />Rh</div>
+      <div class="overggangsMetalen element">46<br />Pd</div>
+      <div class="overggangsMetalen element">47<br />Ag</div>
+      <div class="overggangsMetalen element">48<br />Cd</div>
+      <div class="basisMetalen element">49<br />In</div>
+      <div class="basisMetalen element">50<br />Sn</div>
+      <div class="semiMetalen element">51<br />Sb</div>
+      <div class="semiMetalen element">52<br />Te</div>
+      <div class="Halogenen element">53<br />I</div>
+      <div class="Edelgassen element">54<br />Xe</div>
 
-      <div class="element">55<br />Cs</div>
-      <div class="element">56<br />Ba</div>
-      <div class="empty" style="grid-column: 3 / span 1"></div>
-      <div class="element">72<br />Hf</div>
-      <div class="element">73<br />Ta</div>
-      <div class="element">74<br />W</div>
-      <div class="element">75<br />Re</div>
-      <div class="element">76<br />Os</div>
-      <div class="element">77<br />Ir</div>
-      <div class="element">78<br />Pt</div>
-      <div class="element">79<br />Au</div>
-      <div class="element">80<br />Hg</div>
-      <div class="element">81<br />Tl</div>
-      <div class="element">82<br />Pb</div>
-      <div class="element">83<br />Bi</div>
-      <div class="element">84<br />Po</div>
-      <div class="element">85<br />At</div>
-      <div class="element">86<br />Rn</div>
+      <div class="alkaliMetalen element">55<br />Cs</div>
+      <div class="aardAlkaliMetalen element">56<br />Ba</div>
+      <div class="overggangsMetalen element">57-71<br />Lantha<br />nide</div>
+      <div class="overggangsMetalen element">72<br />Hf</div>
+      <div class="overggangsMetalen element">73<br />Ta</div>
+      <div class="overggangsMetalen element">74<br />W</div>
+      <div class="overggangsMetalen element">75<br />Re</div>
+      <div class="overggangsMetalen element">76<br />Os</div>
+      <div class="overggangsMetalen element">77<br />Ir</div>
+      <div class="overggangsMetalen element">78<br />Pt</div>
+      <div class="overggangsMetalen element">79<br />Au</div>
+      <div class="overggangsMetalen element">80<br />Hg</div>
+      <div class="basisMetalen element">81<br />Tl</div>
+      <div class="basisMetalen element">82<br />Pb</div>
+      <div class="basisMetalen element">83<br />Bi</div>
+      <div class="semiMetalen element">84<br />Po</div>
+      <div class="Halogenen element">85<br />At</div>
+      <div class="Edelgassen element">86<br />Rn</div>
+
+      <div class="alkaliMetalen element">87<br />Fr</div>
+      <div class="aardAlkaliMetalen element">88<br />Ra</div>
+      <div class="overggangsMetalen element">89-103<br /><br /></div>
+      <div class="overggangsMetalen element">104<br />Rf</div>
+      <div class="overggangsMetalen element">105<br />Db</div>
+      <div class="overggangsMetalen element">106<br />Sg</div>
+      <div class="overggangsMetalen element">107<br />Bh</div>
+      <div class="overggangsMetalen element">108<br />Hs</div>
+      <div class="overggangsMetalen element">109<br />Mt</div>
+      <div class="overggangsMetalen element">110<br />Ds</div>
+      <div class="overggangsMetalen element">111<br />Rg</div>
+      <div class="overggangsMetalen element">112<br />Cn</div>
+      <div class="basisMetalen element">113<br />Uut</div>
+      <div class="basisMetalen element">114<br />Fl</div>
+      <div class="basisMetalen element">115<br />Uup</div>
+      <div class="basisMetalen element">116<br />Lv</div>
+      <div class="Halogenen element">117<br />Uus</div>
+      <div class="Edelgassen element">118<br />Uuo</div>
+    </div>
+
+    <div class="lanthanides">
+      <div class="empty" style="grid-column: 1 / span 2"></div>
+      <div class="Lanthanide element">57<br />La</div>
+      <div class="Lanthanide element">58<br />Ce</div>
+      <div class="Lanthanide element">59<br />Pr</div>
+      <div class="Lanthanide element">60<br />Nd</div>
+      <div class="Lanthanide element">61<br />Pm</div>
+      <div class="Lanthanide element">62<br />Sm</div>
+      <div class="Lanthanide element">63<br />Eu</div>
+      <div class="Lanthanide element">64<br />Gd</div>
+      <div class="Lanthanide element">65<br />Tb</div>
+      <div class="Lanthanide element">66<br />Dy</div>
+      <div class="Lanthanide element">67<br />Ho</div>
+      <div class="Lanthanide element">68<br />Er</div>
+      <div class="Lanthanide element">69<br />Tm</div>
+      <div class="Lanthanide element">70<br />Yb</div>
+      <div class="Lanthanide element">71<br />Lu</div>
+    </div>
+    <div class="actinides">
+      <div class="empty" style="grid-column: 1 / span 2"></div>
+      <div class="Actinide element">89<br />Ac</div>
+      <div class="Actinide element">90<br />Th</div>
+      <div class="Actinide element">91<br />Pa</div>
+      <div class="Actinide element">92<br />U</div>
+      <div class="Actinide element">93<br />Np</div>
+      <div class="Actinide element">94<br />Pu</div>
+      <div class="Actinide element">95<br />Am</div>
+      <div class="Actinide element">96<br />Cm</div>
+      <div class="Actinide element">97<br />Bk</div>
+      <div class="Actinide element">98<br />Cf</div>
+      <div class="Actinide element">99<br />Es</div>
+      <div class="Actinide element">100<br />Fm</div>
+      <div class="Actinide element">101<br />Md</div>
+      <div class="Actinide element">102<br />No</div>
+      <div class="Actinide element">103<br />Lr</div>
     </div>
   </body>
 </html>
