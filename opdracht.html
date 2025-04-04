@@ -162,34 +162,34 @@
     const elements = ["H", "He", "Li", "Be", "B", "C", "N", "O", "F", "Ne", "Na", "Mg", "Al", "Si", "P", "S", "Cl", "Ar", "K", "Ca", "Sc", "Ti", "V", "Cr", "Mn", "Fe", "Co", "Ni", "Cu", "Zn", "Ga", "Ge", "As", "Se", "Br", "Kr", "Rb", "Sr", "Y", "Zr", "Nb", "Mo", "Tc", "Ru", "Rh", "Pd", "Ag", "Cd", "In", "Sn", "Sb", "Te", "I", "Xe", "Cs", "Ba", "Hf", "Ta", "W", "Re", "Os", "Ir", "Pt", "Au", "Hg", "Tl", "Pb", "Bi", "Po", "At", "Rn"];
 
     const combinations = {
-        "H,O": {"name": "Water (H₂O)"},
-        "C,O": {"name": "Koolstofdioxide (CO₂)"},
-        "Na,Cl": {"name": "Keukenzout (NaCl)"},
-        "Fe,O": {"name": "IJzeroxide (Fe₂O₃)"},
-        "Fe,C": {"name": "Staal (Fe + C)"},
-        "Cu,Zn": {"name": "Messing (CuZn)"},
-        "H,N": {"name": "Ammoniak (NH₃)"},
-        "C,H": {"name": "Methaan (CH₄)"},
-        "H,Cl": {"name": "Waterstofchloride (HCl)"},
-        "Mg,O": {"name": "Magnesiumoxide (MgO)"},
-        "K,Cl": {"name": "Kaliumchloride (KCl)"},
-        "Zn,O": {"name": "Zinkoxide (ZnO)"},
-        "Ag,Br": {"name": "Zilverbromide (AgBr)"},
-        "Ti,O": {"name": "Titaandioxide (TiO₂)"},
-        "C,H,O": {"name": "Glucose (C₆H₁₂O₆)"},
-        "Ca,C,O": {"name": "Calciumcarbonaat (CaCO₃)"},
-        "N,H,O": {"name": "Salpeterzuur (HNO₃)"},
-        "Na,H,C,O": {"name": "Natriumbicarbonaat (NaHCO₃)"},
-        "Ba,O,S": {"name": "Bariumsulfaat (BaSO₄)"},
-        "Al,O": {"name": "Aluminiumoxide (Al₂O₃)"},
-        "Si,O": {"name": "Silica (SiO₂)"},
-        "S,O": {"name": "Zwaveldioxide (SO₂)"},
-        "Pb,O": {"name": "Loodoxide (PbO)"},
-        "Hg,Cl": {"name": "Kwikchloride (HgCl₂)"},
-        "Au,Ag": {"name": "Elektrum (AuAg)"},
-        "Ni,Cr": {"name": "Nichroom (NiCr)"},
-        "Cu,Sn": {"name": "Brons (CuSn)"},
-        "W,C": {"name": "Wolfraamcarbide (WC)"}
+        "H,O": {"name": "Water"},
+        "C,O": {"name": "Koolstofdioxide"},
+        "Na,Cl": {"name": "Keukenzout"},
+        "Fe,O": {"name": "IJzeroxide"},
+        "Fe,C": {"name": "Staal"},
+        "Cu,Zn": {"name": "Messing"},
+        "H,N": {"name": "Ammoniak"},
+        "C,H": {"name": "Methaan"},
+        "H,Cl": {"name": "Waterstofchloride"},
+        "Mg,O": {"name": "Magnesiumoxide"},
+        "K,Cl": {"name": "Kaliumchloride"},
+        "Zn,O": {"name": "Zinkoxide"},
+        "Ag,Br": {"name": "Zilverbromide"},
+        "Ti,O": {"name": "Titaandioxide"},
+        "C,H,O": {"name": "Glucose"},
+        "Ca,C,O": {"name": "Calciumcarbonaat"},
+        "N,H,O": {"name": "Salpeterzuur"},
+        "Na,H,C,O": {"name": "Natriumbicarbonaat"},
+        "Ba,O,S": {"name": "Bariumsulfaat"},
+        "Al,O": {"name": "Aluminiumoxide"},
+        "Si,O": {"name": "Silica"},
+        "S,O": {"name": "Zwaveldioxide"},
+        "Pb,O": {"name": "Loodoxide"},
+        "Hg,Cl": {"name": "Kwikchloride"},
+        "Au,Ag": {"name": "Elektrum"},
+        "Ni,Cr": {"name": "Nichroom"},
+        "Cu,Sn": {"name": "Brons"},
+        "W,C": {"name": "Wolfraamcarbide"}
     };
 
     // Quiz variabelen
@@ -200,7 +200,7 @@
     let timeLeft = 30;
     let timer;
     let questionsAnswered = 0;
-    const totalQuestions = 10; // Aantal vragen per quiz
+    const totalQuestions = 10;
 
     // Elementen grid opbouwen
     const grid = document.getElementById("elementGrid");
@@ -244,13 +244,11 @@
     }
 
     function nextQuestion() {
-        // Reset selectie
         selected = [];
         document.querySelectorAll(".element").forEach(el => {
             el.classList.remove("selected", "disabled");
         });
 
-        // Kies een willekeurige combinatie
         const comboKeys = Object.keys(combinations);
         const randomKey = comboKeys[Math.floor(Math.random() * comboKeys.length)];
         currentQuestion = {
@@ -258,10 +256,7 @@
             name: combinations[randomKey].name
         };
 
-        // Toon de vraag
         document.getElementById("question").textContent = `Welke elementen vormen ${currentQuestion.name}?`;
-
-        // Start timer
         resetTimer();
         startTimer();
     }
@@ -315,7 +310,6 @@
         loseLife();
     }
 
-    // Bevestigingsknop
     document.getElementById("submitButton").addEventListener("click", () => {
         clearInterval(timer);
         checkAnswer();
@@ -326,18 +320,15 @@
         const correctAnswer = [...currentQuestion.answer].sort().join(",");
 
         if (userAnswer === correctAnswer) {
-            // Correct antwoord
-            score += timeLeft; // Meer punten voor sneller antwoorden
+            score += timeLeft;
             questionsAnswered++;
             document.getElementById("result").innerHTML = "Correct! 🎉";
             updateScore();
         } else {
-            // Fout antwoord
             document.getElementById("result").innerHTML = `Helaas, fout. Het juiste antwoord was: <span id="correctAnswer">${currentQuestion.answer.join(" + ")}</span>`;
             loseLife();
         }
 
-        // Volgende vraag of eindig quiz
         if (lives > 0 && questionsAnswered < totalQuestions) {
             setTimeout(nextQuestion, 2000);
         } else {
@@ -359,8 +350,7 @@
         document.getElementById("endScreen").style.display = "flex";
         document.getElementById("finalScore").textContent = `Je eindscore: ${score}`;
 
-        // Geef feedback op basis van score
-        const maxScore = totalQuestions * 30; // Max 30 punten per vraag
+        const maxScore = totalQuestions * 30;
         const percentage = (score / maxScore) * 100;
         let message = "";
 
@@ -372,7 +362,6 @@
         document.getElementById("finalMessage").textContent = message;
     }
 
-    // Herstartknop
     document.getElementById("restartButton").addEventListener("click", () => {
         document.getElementById("endScreen").style.display = "none";
         document.getElementById("quizArea").style.display = "block";
