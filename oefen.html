@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>ChemEduQuest - Enkel Bekende Mixen (2 of 3)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      text-align: center;
+      padding: 20px;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(18, 1fr);
+      gap: 5px;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .element {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      user-select: none;
+    }
+    .element:hover {
+      background-color: #eef;
+    }
+    .element.selected {
+      background-color: #b3e5fc;
+      border-color: #0288d1;
+    }
+    .element.disabled {
+      background-color: #eee;
+      color: #999;
+      border-color: #ccc;
+      pointer-events: none;
+    }
+    #mixButton {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #0288d1;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+    /* Popup stijlen */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      z-index: 1000;
+      overflow-y: auto;
+    }
+    .popup-content {
+      background-color: #fff;
+      margin: 5% auto;
+      padding: 20px;
+      border-radius: 8px;
+      width: 80%;
+      max-width: 800px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .close-btn {
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .combination-list {
+      text-align: left;
+      margin-top: 20px;
+      column-count: 2;
+      column-gap: 20px;
+    }
+    .combination-item {
+      margin-bottom: 10px;
+      break-inside: avoid;
+    }
+    #showCombinationsBtn {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<h1>Chemische Mix Simulator (alleen bekende stoffen)</h1>
+<p>Selecteer 2 of 3 elementen waarvan een bekende mix bestaat.</p>
+<div class="container" id="elementGrid"></div>
+<button id="mixButton">Mix</button>
+
+<div style="margin-top: 15px;">
+  <strong>Legenda:</strong>
+  <span style="display:inline-block; width:20px; height:20px; background:#fff; border:1px solid #ccc; margin-left:10px;"></span> Beschikbaar
+  <span style="display:inline-block; width:20px; height:20px; background:#b3e5fc; border:1px solid #0288d1; margin-left:10px;"></span> Geselecteerd
+  <span style="display:inline-block; width:20px; height:20px; background:#eee; border:1px solid #ccc; color:#999; margin-left:10px;"></span> Niet beschikbaar
+</div>
+
+<button id="resetButton" style="margin-top: 15px; padding: 10px 20px; background-color: #e53935; color: white; border: none; border-radius: 6px; cursor: pointer;">
+  Reset selectie
+</button>
+
+<button id="showCombinationsBtn">Toon alle mogelijke combinaties</button>
+
+<div id="result"></div>
+
+<!-- Popup voor alle combinaties -->
+<div id="combinationsPopup" class="popup">
+  <div class="popup-content">
+    <span class="close-btn">&times;</span>
+    <h2>Alle bekende combinaties</h2>
+    <div class="combination-list" id="allCombinationsList"></div>
+  </div>
+</div>
+
+<script>
+  const elements = ["H", "He", "Li", "Be", "B", "C", "N", "O", "F", "Ne", "Na", "Mg", "Al", "Si", "P", "S", "Cl", "Ar", "K", "Ca", "Sc", "Ti", "V", "Cr", "Mn", "Fe", "Co", "Ni", "Cu", "Zn", "Ga", "Ge", "As", "Se", "Br", "Kr", "Rb", "Sr", "Y", "Zr", "Nb", "Mo", "Tc", "Ru", "Rh", "Pd", "Ag", "Cd", "In", "Sn", "Sb", "Te", "I", "Xe", "Cs", "Ba", "Hf", "Ta", "W", "Re", "Os", "Ir", "Pt", "Au", "Hg", "Tl", "Pb", "Bi", "Po", "At", "Rn"];
+
+  // Uitgebreide lijst van combinaties (ongeveer 50 in totaal)
+  const combinations = {
+    // Bestaande combinaties
+    "H,O": {"name": "Water (H₂O)", "use": "Onmisbaar voor leven, gebruikt in huishoudens, industrie en biologie."},
+    "C,O": {"name": "Koolstofdioxide (CO₂)", "use": "Gebruikt in frisdrank, brandblussers en fotosynthese bij planten."},
+    "Na,Cl": {"name": "Keukenzout (NaCl)", "use": "Wordt gebruikt in voeding en conservering."},
+    "Fe,O": {"name": "IJzeroxide (Fe₂O₃)", "use": "Wordt gebruikt als pigment en ontstaat bij roestvorming."},
+    "Fe,C": {"name": "Staal (Fe + C)", "use": "Belangrijk constructiemateriaal in gebouwen en machines."},
+    "Cu,Zn": {"name": "Messing (CuZn)", "use": "Gebruikt in muziekinstrumenten, decoraties en leidingen."},
+    "H,N": {"name": "Ammoniak (NH₃)", "use": "Gebruikt in meststoffen en reinigingsmiddelen."},
+    "C,H": {"name": "Methaan (CH₄)", "use": "Belangrijke brandstof en broeikasgas."},
+    "H,Cl": {"name": "Waterstofchloride (HCl)", "use": "Wordt gebruikt als sterk zuur in laboratoria en industrie."},
+    "Mg,O": {"name": "Magnesiumoxide (MgO)", "use": "Vuurvast materiaal en supplement in de geneeskunde."},
+    "K,Cl": {"name": "Kaliumchloride (KCl)", "use": "Gebruikt als meststof en zoutvervanger."},
+    "Zn,O": {"name": "Zinkoxide (ZnO)", "use": "Gebruikt in zonnecrème, medicijnen en rubber."},
+    "Ag,Br": {"name": "Zilverbromide (AgBr)", "use": "Wordt gebruikt in fotografische film."},
+    "Ti,O": {"name": "Titaandioxide (TiO₂)", "use": "Wit pigment in verf, zonnecrème en cosmetica."},
+    "C,H,O": {"name": "Glucose (C₆H₁₂O₆)", "use": "Belangrijke energiebron in voedsel en biologische processen."},
+    "Ca,C,O": {"name": "Calciumcarbonaat (CaCO₃)", "use": "Gebruikt in krijt, kalksteen en antacida."},
+    "N,H,O": {"name": "Salpeterzuur (HNO₃)", "use": "Gebruikt in kunstmest en explosieven."},
+    "Na,H,C,O": {"name": "Natriumbicarbonaat (NaHCO₃)", "use": "Baking soda, gebruikt in bakken en reinigen."},
+    "Ba,O,S": {"name": "Bariumsulfaat (BaSO₄)", "use": "Contrastmiddel bij medische beeldvorming (röntgenonderzoek)."},
+
+    // Nieuwe combinaties (30+)
+    "Al,O": {"name": "Aluminiumoxide (Al₂O₃)", "use": "Gebruikt als schuurmiddel en in keramiek."},
+    "Si,O": {"name": "Silica (SiO₂)", "use": "Basiscomponent van glas en zand."},
+    "S,O": {"name": "Zwaveldioxide (SO₂)", "use": "Gebruikt in de productie van zwavelzuur en als conserveermiddel."},
+    "Pb,O": {"name": "Loodoxide (PbO)", "use": "Gebruikt in glas en keramiek."},
+    "Hg,Cl": {"name": "Kwikchloride (HgCl₂)", "use": "Gebruikt als desinfectiemiddel en in de fotografie."},
+    "Au,Ag": {"name": "Elektrum (AuAg)", "use": "Natuurlijke legering van goud en zilver, gebruikt in sieraden."},
+    "Ni,Cr": {"name": "Nichroom (NiCr)", "use": "Gebruikt in verwarmingselementen vanwege hoge weerstand."},
+    "Cu,Sn": {"name": "Brons (CuSn)", "use": "Belangrijke legering in kunst en gereedschap."},
+    "W,C": {"name": "Wolfraamcarbide (WC)", "use": "Extreem hard materiaal gebruikt in gereedschap."},
+    "Li,O": {"name": "Lithiumoxide (Li₂O)", "use": "Gebruikt in keramiek en als component in batterijen."},
+    "Be,O": {"name": "Berylliumoxide (BeO)", "use": "Gebruikt in hoogwaardige keramiek en elektronica."},
+    "B,O": {"name": "Boortrioxide (B₂O₃)", "use": "Gebruikt in glas en email."},
+    "F,Ca": {"name": "Calciumfluoride (CaF₂)", "use": "Natuurlijk voorkomend als fluoriet, gebruikt in optiek."},
+    "P,O": {"name": "Fosforpentoxide (P₂O₅)", "use": "Gebruikt als droogmiddel en in kunstmest."},
+    "K,O": {"name": "Kaliumoxide (K₂O)", "use": "Belangrijk component in meststoffen."},
+    "Mn,O": {"name": "Mangaanoxide (MnO₂)", "use": "Gebruikt in batterijen en als katalysator."},
+    "Co,O": {"name": "Kobaltoxide (CoO)", "use": "Gebruikt als pigment en in keramiek."},
+    "H,S": {"name": "Waterstofsulfide (H₂S)", "use": "Giftig gas met kenmerkende rotte eieren geur."},
+    "C,Cl": {"name": "Tetrachloormethaan (CCl₄)", "use": "Vroeger gebruikt als oplosmiddel en in brandblussers."},
+    "N,O": {"name": "Distikstofoxide (N₂O)", "use": "Lachgas, gebruikt als anestheticum en drijfgas."},
+    "Na,O": {"name": "Natriumoxide (Na₂O)", "use": "Belangrijk in glasproductie."},
+    "Ca,O": {"name": "Calciumoxide (CaO)", "use": "Gebluste kalk, gebruikt in bouw en landbouw."},
+    "Fe,S": {"name": "Pyriet (FeS₂)", "use": "Ook wel 'fool's gold', gebruikt voor zwavelzuurproductie."},
+    "Cu,O": {"name": "Koperoxide (Cu₂O)", "use": "Gebruikt als pigment en in katalysatoren."},
+    "Ag,S": {"name": "Zilversulfide (Ag₂S)", "use": "Vormt de donkere laag op zilver (oxidatie)."},
+    "Sn,O": {"name": "Tinoxide (SnO₂)", "use": "Gebruikt in optische coatings en sensoren."},
+    "Pb,C,H,O": {"name": "Loodacetaat (Pb(C₂H₃O₂)₂)", "use": "Historisch gebruikt als zoetstof (zeer giftig!)."},
+    "Hg,S": {"name": "Cinnaber (HgS)", "use": "Rood pigment en belangrijk erts voor kwikwinning."},
+    "U,O": {"name": "Uraniumoxide (UO₂)", "use": "Brandstof in kernreactoren."},
+    "C,N": {"name": "Cyanide (CN⁻)", "use": "Gebruikt in metaalbewerking (zeer giftig!)."},
+    "Si,C": {"name": "Siliciumcarbide (SiC)", "use": "Zeer hard materiaal, gebruikt als schuurmiddel."},
+    "Al,Cu": {"name": "Duraluminium (AlCu)", "use": "Lichte legering gebruikt in vliegtuigbouw."},
+    "Zn,S": {"name": "Zinksulfide (ZnS)", "use": "Gebruikt in luminiscente verf en displays."},
+    "Rb,Ag,I": {"name": "Rubidium-zilver-jodide (RbAg₄I₅)", "use": "Vaste elektrolyt in speciale batterijen."},
+    "K,Na": {"name": "NaK-legering", "use": "Vloeibare metaallegering gebruikt als warmteoverdrager."},
+    "Bi,Pb,Sn,Cd": {"name": "Wood's metaal", "use": "Laagsmeltende legering voor brandbeveiliging."}
+  };
+
+  // Valid combinations voor filtering
+  const validCombinations = {
+    "H": ["C", "Cl", "N", "Na", "O", "S"],
+    "O": ["Al", "Ba", "B", "Be", "C", "Ca", "Co", "Cu", "Fe", "H", "K", "Li", "Mg", "Mn", "N", "Na", "P", "Pb", "S", "Si", "Sn", "Ti", "U", "Zn"],
+    "C": ["Ca", "Cl", "Fe", "H", "N", "Na", "O", "Si", "W"],
+    "Na": ["C", "Cl", "H", "O", "K"],
+    "Cl": ["C", "H", "Hg", "K", "Na", "Pb"],
+    "Fe": ["C", "O", "S"],
+    "Cu": ["O", "Sn", "Zn", "Al"],
+    "Zn": ["Cu", "O", "S"],
+    "N": ["H", "O", "C"],
+    "Mg": ["O"],
+    "K": ["Cl", "Na", "O"],
+    "Ag": ["Br", "S", "Rb", "I"],
+    "Br": ["Ag"],
+    "Ti": ["O"],
+    "Ca": ["C", "F", "O"],
+    "Ba": ["O", "S"],
+    "S": ["Ba", "Fe", "H", "Hg", "O", "Zn"],
+    "Al": ["Cu", "O"],
+    "Si": ["C", "O"],
+    "Pb": ["Cl", "O", "C", "H"],
+    "Hg": ["Cl", "S"],
+    "Au": ["Ag"],
+    "Ni": ["Cr"],
+    "Cr": ["Ni"],
+    "Sn": ["Cu", "O"],
+    "W": ["C"],
+    "Li": ["O"],
+    "Be": ["O"],
+    "B": ["O"],
+    "F": ["Ca"],
+    "P": ["O"],
+    "Mn": ["O"],
+    "Co": ["O"],
+    "U": ["O"],
+    "Rb": ["Ag", "I"],
+    "I": ["Ag", "Rb"],
+    "Cd": ["Bi", "Pb", "Sn"],
+    "Bi": ["Pb", "Sn", "Cd"],
+    "Sn": ["Bi", "Pb", "Cd"]
+  };
+
+  const selected = [];
+  const grid = document.getElementById("elementGrid");
+
+  // Elementen grid opbouwen
+  elements.forEach(el => {
+    const div = document.createElement("div");
+    div.className = "element";
+    div.textContent = el;
+    div.dataset.symbol = el;
+    div.addEventListener("click", () => {
+      if (div.classList.contains("disabled")) return;
+
+      const symbol = div.dataset.symbol;
+      const i = selected.indexOf(symbol);
+
+      if (i > -1) {
+        selected.splice(i, 1);
+        div.classList.remove("selected");
+      } else if (selected.length < 3) {
+        selected.push(symbol);
+        div.classList.add("selected");
+      }
+
+      updateFilter();
+    });
+    grid.appendChild(div);
+  });
+
+  // Filter voor beschikbare elementen
+  function updateFilter() {
+    const allEls = document.querySelectorAll(".element");
+    if (selected.length === 0) {
+      allEls.forEach(el => el.classList.remove("disabled"));
+      return;
+    }
+
+    if (selected.length >= 3) {
+      allEls.forEach(el => {
+        if (!selected.includes(el.dataset.symbol)) {
+          el.classList.add("disabled");
+        } else {
+          el.classList.remove("disabled");
+        }
+      });
+      return;
+    }
+
+    let allowed = new Set(elements);
+    selected.forEach(sel => {
+      if (validCombinations[sel]) {
+        allowed = new Set([...allowed].filter(x => validCombinations[sel].includes(x) || selected.includes(x)));
+      } else {
+        allowed.clear();
+      }
+    });
+
+    allEls.forEach(el => {
+      if (!allowed.has(el.dataset.symbol)) {
+        el.classList.add("disabled");
+      } else {
+        el.classList.remove("disabled");
+      }
+    });
+  }
+
+  // Mix button functionaliteit
+  document.getElementById("mixButton").addEventListener("click", () => {
+    const sorted = [...selected].sort().join(",");
+    const result = combinations[sorted];
+    document.getElementById("result").innerHTML = result
+            ? `<strong>${result.name}</strong><br>${result.use}`
+            : "Deze combinatie is niet herkend als bekende stof. Kies een andere combinatie.";
+  });
+
+  // Reset button functionaliteit
+  document.getElementById("resetButton").addEventListener("click", () => {
+    selected.length = 0;
+    document.querySelectorAll(".element").forEach(el => {
+      el.classList.remove("selected", "disabled");
+    });
+    document.getElementById("result").innerHTML = "";
+  });
+
+  // Popup functionaliteit voor alle combinaties
+  const popup = document.getElementById("combinationsPopup");
+  const showBtn = document.getElementById("showCombinationsBtn");
+  const closeBtn = document.querySelector(".close-btn");
+  const combList = document.getElementById("allCombinationsList");
+
+  // Toon popup
+  showBtn.addEventListener("click", () => {
+    // Vul de lijst met combinaties
+    combList.innerHTML = "";
+    const sortedCombinations = Object.keys(combinations).sort();
+
+    sortedCombinations.forEach(key => {
+      const item = document.createElement("div");
+      item.className = "combination-item";
+      item.innerHTML = `<strong>${key.replace(",", " + ")}</strong>: ${combinations[key].name} - ${combinations[key].use}`;
+      combList.appendChild(item);
+    });
+
+    popup.style.display = "block";
+  });
+
+  // Sluit popup
+  closeBtn.addEventListener("click", () => {
+    popup.style.display = "none";
+  });
+
+  // Sluit popup als er buiten geklikt wordt
+  window.addEventListener("click", (event) => {
+    if (event.target === popup) {
+      popup.style.display = "none";
+    }
+  });
+</script>
+</body>
+</html>
