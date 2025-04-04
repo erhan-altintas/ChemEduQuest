@@ -1,0 +1,79 @@
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f4f4f4;
+  padding: 20px;
+}
+.container {
+  display: grid;
+  grid-template-columns: repeat(18, 1fr);
+  gap: 5px;
+  max-width: 1200px;
+}
+.element {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 1.2;
+}
+.alkaliMetalen {
+  background-color: gray;
+  color: #fff;
+}
+.aardAlkaliMetalen {
+  background-color: lightgray;
+  color: #000;
+}
+.overggangsMetalen {
+  background-color: yellow;
+  color: #000;
+}
+.basisMetalen {
+  background-color: cyan;
+  color: #000;
+}
+.semiMetalen {
+  background-color: lightblue;
+  color: #000;
+}
+.nietMetalen {
+  background-color: blue;
+  color: #fff;
+}
+.Halogenen {
+  background-color: orange;
+  color: #fff;
+}
+.Edelgassen {
+  background-color: red;
+  color: #fff;
+}
+.Lanthanide {
+  background-color: lightgreen;
+  color: #000;
+}
+.Actinide {
+  background-color: lightskyblue;
+  color: #000;
+}
+.empty {
+  visibility: hidden;
+}
+.lanthanides,
+.actinides {
+  display: grid;
+  grid-template-columns: repeat(18, 1fr);
+  gap: 5px;
+  margin-top: 10px;
+}
