@@ -10,6 +10,7 @@
             text-align: center;
             padding: 20px;
         }
+
         .container {
             display: grid;
             grid-template-columns: repeat(18, 1fr);
@@ -17,6 +18,7 @@
             max-width: 1200px;
             margin: 20px auto;
         }
+
         .element {
             background-color: #fff;
             border: 1px solid #ccc;
@@ -26,19 +28,23 @@
             cursor: pointer;
             user-select: none;
         }
+
         .element:hover {
             background-color: #eef;
         }
+
         .element.selected {
             background-color: #b3e5fc;
             border-color: #0288d1;
         }
+
         .element.disabled {
             background-color: #eee;
             color: #999;
             border-color: #ccc;
             pointer-events: none;
         }
+
         #submitButton {
             margin-top: 15px;
             padding: 10px 20px;
@@ -49,6 +55,7 @@
             border-radius: 6px;
             cursor: pointer;
         }
+
         #quizInfo {
             display: flex;
             justify-content: space-between;
@@ -56,12 +63,14 @@
             margin: 0 auto 20px;
             font-size: 18px;
         }
+
         #timer, #lives, #score {
             background-color: #fff;
             padding: 10px 20px;
             border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
         #question {
             font-size: 20px;
             margin-bottom: 20px;
@@ -72,23 +81,26 @@
             margin-left: auto;
             margin-right: auto;
         }
+
         #result {
             margin-top: 20px;
             font-size: 18px;
             min-height: 50px;
         }
+
         .life {
             color: red;
             font-size: 24px;
             margin: 0 3px;
         }
+
         #startScreen, #endScreen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.8);
+            background-color: rgba(0, 0, 0, 0.8);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -96,6 +108,7 @@
             z-index: 1000;
             color: white;
         }
+
         .screen-content {
             background-color: #333;
             padding: 30px;
@@ -103,6 +116,7 @@
             max-width: 600px;
             text-align: center;
         }
+
         .screen-button {
             margin-top: 20px;
             padding: 12px 25px;
@@ -113,9 +127,31 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         #correctAnswer {
             font-weight: bold;
             color: #4CAF50;
+        }
+
+        #playgroundButton {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background-color: #673ab7;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 1001;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+        }
+
+        #playgroundButton:hover {
+            background-color: #512da8;
         }
     </style>
 </head>
@@ -166,7 +202,7 @@
         "C,O": {"name": "Koolstofdioxide"},
         "Na,Cl": {"name": "Keukenzout"},
         "Fe,O": {"name": "IJzeroxide"},
-        "Fe,C": {"name": "Staal"},
+        "Fe,C": {"name": "Staal"}, // Legering
         "Cu,Zn": {"name": "Messing"},
         "H,N": {"name": "Ammoniak"},
         "C,H": {"name": "Methaan"},
@@ -186,11 +222,13 @@
         "S,O": {"name": "Zwaveldioxide"},
         "Pb,O": {"name": "Loodoxide"},
         "Hg,Cl": {"name": "Kwikchloride"},
-        "Au,Ag": {"name": "Elektrum"},
-        "Ni,Cr": {"name": "Nichroom"},
-        "Cu,Sn": {"name": "Brons"},
-        "W,C": {"name": "Wolfraamcarbide"}
+        "Au,Ag": {"name": "Elektrum"}, // Legering
+        "Ni,Cr": {"name": "Nichroom"}, // Legering
+        "Cu,Sn": {"name": "Brons"}, // Legering
+        "W,C": {"name": "Wolfraamcarbide"},
+
     };
+
 
     // Quiz variabelen
     let selected = [];
@@ -256,7 +294,9 @@
             name: combinations[randomKey].name
         };
 
-        document.getElementById("question").textContent = `Welke elementen vormen ${currentQuestion.name}?`;
+        const aantal = currentQuestion.answer.length;
+        document.getElementById("question").textContent = `Welke elementen vormen ${currentQuestion.name}? (Selecteer ${aantal} element${aantal > 1 ? 'en' : ''})`;
+
         resetTimer();
         startTimer();
     }
@@ -367,6 +407,11 @@
         document.getElementById("quizArea").style.display = "block";
         startQuiz();
     });
+    document.getElementById("playgroundButton").addEventListener("click", function () {
+        window.location.href = "../Chemify/oefen.html";
+    });
 </script>
+<a href="../Chemify/oefen.html" id="playgroundButton">Playground</a>
+
 </body>
 </html>
