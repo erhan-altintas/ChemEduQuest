@@ -299,6 +299,7 @@
 
     // Quiz functies
     function startQuiz() {
+        quizEnded = false;
         score = 0;
         lives = 3;
         questionsAnswered = 0;
@@ -306,6 +307,7 @@
         updateLives();
         nextQuestion();
     }
+
 
     function nextQuestion() {
         selected = [];
@@ -397,9 +399,8 @@
 
         if (lives > 0 && questionsAnswered < totalQuestions) {
             setTimeout(nextQuestion, 2000);
-        } else {
-            endQuiz();
         }
+
     }
 
     function loseLife() {
