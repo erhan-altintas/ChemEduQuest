@@ -59,16 +59,18 @@
         #quizInfo {
             display: flex;
             justify-content: space-between;
+            flex-wrap: wrap;
             max-width: 1200px;
             margin: 0 auto 20px;
             font-size: 18px;
         }
 
-        #timer, #lives, #score {
+        #timer, #lives, #score, #highscoreBox {
             background-color: #fff;
             padding: 10px 20px;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 5px;
         }
 
         #question {
@@ -162,8 +164,7 @@
         <p>Test je kennis van chemische combinaties!</p>
         <p>Je krijgt een stof te zien en moet de juiste elementen selecteren.</p>
         <p>Je hebt 3 levens en 30 seconden per vraag. Hoe meer vragen je correct beantwoordt, hoe hoger je score!</p>
-        <p>Vul je naam in om te beginnen:</p>
-        <input type="text" id="playerName" placeholder="Jouw naam" required style="padding: 10px; font-size: 16px; border-radius: 5px; border: none; margin-bottom: 10px;">
+        <p id="highscoreDisplay" style="margin-top: 10px;"></p>
         <button class="screen-button" id="startButton">Start Quiz</button>
     </div>
 </div>
@@ -174,6 +175,7 @@
     <div id="quizInfo">
         <div id="timer">Tijd: 30s</div>
         <div id="score">Score: 0</div>
+        <div id="highscoreBox">Highscore: 0</div>
         <div id="lives">Levens: <span class="life">♥</span><span class="life">♥</span><span class="life">♥</span></div>
     </div>
 
@@ -193,33 +195,17 @@
         <p id="finalMessage">Goed gedaan!</p>
         <button class="screen-button" id="restartButton">Opnieuw Spelen</button>
     </div>
-    <div id="leaderboard" style="margin-top: 30px;">
-        <h2>Top Scores</h2>
-        <table id="scoreboard" style="margin: 0 auto; border-collapse: collapse; width: 100%; max-width: 600px; background-color: white; color: black;">
-            <thead>
-            <tr>
-                <th>Naam</th>
-                <th>Score</th>
-                <th>Datum</th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-    </div>
-
 </div>
 
 <script>
-    // Elementen en combinaties
-    const elements = ["H", "He", "Li", "Be", "B", "C", "N", "O", "F", "Ne", "Na", "Mg", "Al", "Si", "P", "S", "Cl", "Ar", "K", "Ca", "Sc", "Ti", "V", "Cr", "Mn", "Fe", "Co", "Ni", "Cu", "Zn", "Ga", "Ge", "As", "Se", "Br", "Kr", "Rb", "Sr", "Y", "Zr", "Nb", "Mo", "Tc", "Ru", "Rh", "Pd", "Ag", "Cd", "In", "Sn", "Sb", "Te", "I", "Xe", "Cs", "Ba", "Hf", "Ta", "W", "Re", "Os", "Ir", "Pt", "Au", "Hg", "Tl", "Pb", "Bi", "Po", "At", "Rn"];
+    const elements = [..."H,He,Li,Be,B,C,N,O,F,Ne,Na,Mg,Al,Si,P,S,Cl,Ar,K,Ca,Sc,Ti,V,Cr,Mn,Fe,Co,Ni,Cu,Zn,Ga,Ge,As,Se,Br,Kr,Rb,Sr,Y,Zr,Nb,Mo,Tc,Ru,Rh,Pd,Ag,Cd,In,Sn,Sb,Te,I,Xe,Cs,Ba,Hf,Ta,W,Re,Os,Ir,Pt,Au,Hg,Tl,Pb,Bi,Po,At,Rn".split(",")];
 
     const combinations = {
         "H,O": {"name": "Water"},
         "C,O": {"name": "Koolstofdioxide"},
         "Na,Cl": {"name": "Keukenzout"},
         "Fe,O": {"name": "IJzeroxide"},
-        "Fe,C": {"name": "Staal"}, // Legering
+        "Fe,C": {"name": "Staal"},
         "Cu,Zn": {"name": "Messing"},
         "H,N": {"name": "Ammoniak"},
         "C,H": {"name": "Methaan"},
@@ -239,16 +225,12 @@
         "S,O": {"name": "Zwaveldioxide"},
         "Pb,O": {"name": "Loodoxide"},
         "Hg,Cl": {"name": "Kwikchloride"},
-        "Au,Ag": {"name": "Elektrum"}, // Legering
-        "Ni,Cr": {"name": "Nichroom"}, // Legering
-        "Cu,Sn": {"name": "Brons"}, // Legering
+        "Au,Ag": {"name": "Elektrum"},
+        "Ni,Cr": {"name": "Nichroom"},
+        "Cu,Sn": {"name": "Brons"},
         "W,C": {"name": "Wolfraamcarbide"},
-
     };
 
-
-    // Quiz variabelen
-    let playerName = "";
     let selected = [];
     let currentQuestion = {};
     let score = 0;
@@ -258,7 +240,6 @@
     let questionsAnswered = 0;
     const totalQuestions = 10;
 
-    // Elementen grid opbouwen
     const grid = document.getElementById("elementGrid");
     elements.forEach(el => {
         const div = document.createElement("div");
@@ -267,10 +248,8 @@
         div.dataset.symbol = el;
         div.addEventListener("click", () => {
             if (div.classList.contains("disabled")) return;
-
             const symbol = div.dataset.symbol;
             const i = selected.indexOf(symbol);
-
             if (i > -1) {
                 selected.splice(i, 1);
                 div.classList.remove("selected");
@@ -282,27 +261,25 @@
         grid.appendChild(div);
     });
 
-    // Startscherm
     document.getElementById("startButton").addEventListener("click", () => {
-        const input = document.getElementById("playerName").value.trim();
-        if (input === "") {
-            alert("Vul eerst je naam in!");
-            return;
-        }
-        playerName = input;
         document.getElementById("startScreen").style.display = "none";
         document.getElementById("quizArea").style.display = "block";
         startQuiz();
     });
 
+    document.getElementById("restartButton").addEventListener("click", () => {
+        document.getElementById("endScreen").style.display = "none";
+        document.getElementById("quizArea").style.display = "block";
+        startQuiz();
+    });
 
-    // Quiz functies
     function startQuiz() {
         score = 0;
         lives = 3;
         questionsAnswered = 0;
         updateScore();
         updateLives();
+        updateHighscoreBox();
         nextQuestion();
     }
 
@@ -333,9 +310,7 @@
         timer = setInterval(() => {
             timeLeft--;
             updateTimer();
-            if (timeLeft <= 0) {
-                timeUp();
-            }
+            if (timeLeft <= 0) timeUp();
         }, 1000);
     }
 
@@ -346,16 +321,18 @@
     }
 
     function updateTimer() {
-        document.getElementById("timer").textContent = `Tijd: ${timeLeft}s`;
-        if (timeLeft <= 10) {
-            document.getElementById("timer").style.color = "red";
-        } else {
-            document.getElementById("timer").style.color = "black";
-        }
+        const timerDiv = document.getElementById("timer");
+        timerDiv.textContent = `Tijd: ${timeLeft}s`;
+        timerDiv.style.color = timeLeft <= 10 ? "red" : "black";
     }
 
     function updateScore() {
         document.getElementById("score").textContent = `Score: ${score}`;
+    }
+
+    function updateHighscoreBox() {
+        const high = localStorage.getItem("chemQuizHighscore") || "0";
+        document.getElementById("highscoreBox").textContent = `Highscore: ${high}`;
     }
 
     function updateLives() {
@@ -404,9 +381,7 @@
     function loseLife() {
         lives--;
         updateLives();
-        if (lives <= 0) {
-            endQuiz();
-        }
+        if (lives <= 0) endQuiz();
     }
 
     function endQuiz() {
@@ -424,54 +399,25 @@
         else if (percentage >= 40) message = "Niet slecht, maar je kunt nog wat meer oefenen!";
         else message = "Blijf oefenen, je wordt vanzelf beter!";
 
-        document.getElementById("finalMessage").textContent = message;
+        const oldHighscore = parseInt(localStorage.getItem("chemQuizHighscore") || "0");
+        if (score > oldHighscore) {
+            localStorage.setItem("chemQuizHighscore", score);
+            message += "<br><strong>Nieuwe highscore! 🎉</strong>";
+        } else {
+            message += `<br>Highscore: ${oldHighscore}`;
+        }
 
-        fetch("https://chem-edu-quest.vercel.app/api/save-score", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                name: playerName,
-                score: score
-            })
-        });
-        loadLeaderboard();
-
+        document.getElementById("finalMessage").innerHTML = message;
+        updateHighscoreBox();
     }
 
-    document.getElementById("restartButton").addEventListener("click", () => {
-        document.getElementById("endScreen").style.display = "none";
-        document.getElementById("quizArea").style.display = "block";
-        startQuiz();
+    window.addEventListener("load", () => {
+        const high = localStorage.getItem("chemQuizHighscore") || "0";
+        document.getElementById("highscoreDisplay").textContent = `Huidige highscore: ${high}`;
+        updateHighscoreBox();
     });
-    document.getElementById("playgroundButton").addEventListener("click", function () {
-        window.location.href = "../Chemify/oefen.html";
-    });
-
-    function loadLeaderboard() {
-        fetch("https://chemeduquest.vercel.app/api/get-score")
-            .then(response => response.json())
-            .then(data => {
-                const tbody = document.querySelector("#scoreboard tbody");
-                tbody.innerHTML = "";
-                data.forEach(entry => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                    <td>${entry.name}</td>
-                    <td>${entry.score}</td>
-                    <td>${new Date(entry.timestamp).toLocaleString()}</td>
-                `;
-                    tbody.appendChild(row);
-                });
-            })
-            .catch(err => {
-                console.error("Fout bij leaderboard:", err);
-            });
-    }
-
 </script>
-<a href="./oefen.html" id="playgroundButton">Playground</a>
 
+<a href="./oefen.html" id="playgroundButton">Playground</a>
 </body>
 </html>
