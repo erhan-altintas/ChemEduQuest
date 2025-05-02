@@ -249,6 +249,7 @@
 
     // Quiz variabelen
     let playerName = "";
+    let quizEnded = false;
     let selected = [];
     let currentQuestion = {};
     let score = 0;
@@ -410,6 +411,8 @@
     }
 
     function endQuiz() {
+        if (quizEnded) return;
+        quizEnded = true;
         clearInterval(timer);
         document.getElementById("quizArea").style.display = "none";
         document.getElementById("endScreen").style.display = "flex";
@@ -466,7 +469,6 @@
                     row.innerHTML = `
                     <td>${entry.name}</td>
                     <td>${entry.score}</td>
-                    <td>${new Date(entry.timestamp).toLocaleString()}</td>
                 `;
                     tbody.appendChild(row);
                 });
