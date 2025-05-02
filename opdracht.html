@@ -426,6 +426,8 @@
 
         document.getElementById("finalMessage").textContent = message;
 
+        console.log("Verstuur naar database:", playerName, score);
+
         fetch("https://chem-edu-quest.vercel.app/api/save-score", {
             method: "POST",
             headers: {
@@ -450,7 +452,7 @@
     });
 
     function loadLeaderboard() {
-        fetch("https://chemeduquest.vercel.app/api/get-score")
+        fetch("https://chem-edu-quest.vercel.app/api/get-score")
             .then(response => response.json())
             .then(data => {
                 const tbody = document.querySelector("#scoreboard tbody");
