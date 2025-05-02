@@ -437,7 +437,11 @@
                 name: playerName,
                 score: score
             })
-        });
+        })
+            .then(res => res.json())
+            .then(data => console.log("Respons van API:", data))
+            .catch(err => console.error("Fout bij opslaan score:", err));
+
         loadLeaderboard();
 
     }
