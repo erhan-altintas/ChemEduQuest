@@ -443,10 +443,12 @@
             })
         })
             .then(res => res.json())
-            .then(data => console.log("Respons van API:", data))
+            .then(data => {
+                console.log("Respons van API:", data);
+                loadLeaderboard();
+            })
             .catch(err => console.error("Fout bij opslaan score:", err));
 
-        loadLeaderboard();
 
     }
 
