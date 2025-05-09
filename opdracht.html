@@ -157,24 +157,24 @@
             background-color: #512da8;
         }
 
-        /* ✅ Toegevoegd: kleur goed zichtbaar bij donkere achtergrond */
-        #leaderboard {
-            color: white;
-            margin-top: 30px;
-        }
 
         #leaderboard table {
-            margin: 0 auto;
-            border-collapse: collapse;
-            width: 100%;
-            max-width: 600px;
-            background-color: #222;
-            color: white;
+            background-color: #fff;
+            color: #000;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        #leaderboard th, #leaderboard td {
+        #leaderboard th {
+            background-color: #0288d1;
+            color: white;
+            padding: 12px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        #leaderboard td {
             padding: 10px;
-            border: 1px solid #444;
+            border-bottom: 1px solid #ccc;
         }
     </style>
 </head>
@@ -197,12 +197,17 @@
         <div id="timer">Tijd: 30s</div>
         <div id="score">Score: 0</div>
         <div id="lives">
-            Levens: <span class="life">♥</span><span class="life">♥</span><span class="life">♥</span>
+            Levens: <span class="life">♥</span><span class="life">♥</span
+        ><span class="life">♥</span>
         </div>
     </div>
+
     <div id="question">Vraag zal hier verschijnen...</div>
+
     <div class="container" id="elementGrid"></div>
+
     <button id="submitButton">Bevestigen</button>
+
     <div id="result"></div>
 </div>
 
@@ -214,6 +219,22 @@
         <button class="screen-button" id="restartButton">Opnieuw Spelen</button>
     </div>
 </div>
+
+<div id="leaderboard" style="margin-top: 30px;">
+    <h2>Top Scores</h2>
+    <table id="scoreboard" style="margin: 0 auto; border-collapse: collapse; width: 100%; max-width: 600px; background-color: white; color: black;">
+        <thead>
+        <tr>
+            <th>Naam</th>
+            <th>Score</th>
+            <th>Datum</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
 
 <div id="leaderboard">
     <h2>Top Scores</h2>
@@ -252,8 +273,11 @@
         div.dataset.symbol = el;
         div.addEventListener("click", () => {
             if (div.classList.contains("disabled")) return;
+
+
             const symbol = div.dataset.symbol;
             const i = selected.indexOf(symbol);
+
             if (i > -1) {
                 selected.splice(i, 1);
                 div.classList.remove("selected");
@@ -286,18 +310,26 @@
 
     function nextQuestion() {
         selected = [];
-        document.querySelectorAll(".element").forEach((el) =>
-            el.classList.remove("selected", "disabled")
-        );
+        document.querySelectorAll(".element").forEach((el) => {
+            el.classList.remove("selected", "disabled");
+        });
+
         const comboKeys = Object.keys(combinations);
-        const randomKey = comboKeys[Math.floor(Math.random() * comboKeys.length)];
+        const randomKey =
+            comboKeys[Math.floor(Math.random() * comboKeys.length)];
+
         currentQuestion = {
             answer: randomKey.split(","),
             name: combinations[randomKey].name,
         };
         const aantal = currentQuestion.answer.length;
-        document.getElementById("question").textContent =
-            `Welke elementen vormen ${currentQuestion.name}? (Selecteer ${aantal} element${aantal > 1 ? "en" : ""})`;
+
+        document.getElementById(
+            "question"
+        ).textContent = `Welke elementen vormen ${
+            currentQuestion.name
+        }? (Selecteer ${aantal} element${aantal > 1 ? "en" : ""})`;
+
         resetTimer();
         startTimer();
     }
@@ -309,7 +341,10 @@
         timer = setInterval(() => {
             timeLeft--;
             updateTimer();
-            if (timeLeft <= 0) timeUp();
+            if (timeLeft <= 0) {
+                timeUp();
+            }
+
         }, 1000);
     }
 
@@ -320,9 +355,14 @@
     }
 
     function updateTimer() {
-        const timerEl = document.getElementById("timer");
-        timerEl.textContent = `Tijd: ${timeLeft}s`;
-        timerEl.style.color = timeLeft <= 10 ? "red" : "black";
+
+        document.getElementById("timer").textContent = `Tijd: ${timeLeft}s`;
+        if (timeLeft <= 10) {
+            document.getElementById("timer").style.color = "red";
+        } else {
+            document.getElementById("timer").style.color = "black";
+        }
+
     }
 
     function updateScore() {
@@ -342,8 +382,13 @@
 
     function timeUp() {
         clearInterval(timer);
-        document.getElementById("result").innerHTML =
-            `Tijd is om! Het juiste antwoord was: <span id="correctAnswer">${currentQuestion.answer.join(" + ")}</span>`;
+
+        document.getElementById(
+            "result"
+        ).innerHTML = `Tijd is om! Het juiste antwoord was: <span id="correctAnswer">${currentQuestion.answer.join(
+            " + "
+        )}</span>`;
+
         loseLife();
     }
 
@@ -361,18 +406,28 @@
             document.getElementById("result").innerHTML = "Correct! 🎉";
             updateScore();
         } else {
-            document.getElementById("result").innerHTML =
-                `Helaas, fout. Het juiste antwoord was: <span id="correctAnswer">${currentQuestion.answer.join(" + ")}</span>`;
+
+            document.getElementById(
+                "result"
+            ).innerHTML = `Helaas, fout. Het juiste antwoord was: <span id="correctAnswer">${currentQuestion.answer.join(
+                " + "
+            )}</span>`;
+
             loseLife();
         }
         if (lives > 0 && questionsAnswered < totalQuestions)
             setTimeout(nextQuestion, 2000);
     }
 
+
+
     function loseLife() {
         lives--;
         updateLives();
-        if (lives <= 0) endQuiz();
+        if (lives <= 0) {
+            endQuiz();
+        }
+
     }
 
     function endQuiz() {
@@ -381,12 +436,24 @@
         clearInterval(timer);
         document.getElementById("quizArea").style.display = "none";
         document.getElementById("endScreen").style.display = "flex";
-        document.getElementById("finalScore").textContent = `Je eindscore: ${score}`;
-        const percentage = (score / (totalQuestions * 30)) * 100;
-        let message = "Blijf oefenen, je wordt vanzelf beter!";
-        if (percentage >= 80) message = "Uitstekend! Je kent je combinaties goed!";
-        else if (percentage >= 60) message = "Goed gedaan!";
-        else if (percentage >= 40) message = "Niet slecht!";
+
+        document.getElementById(
+            "finalScore"
+        ).textContent = `Je eindscore: ${score}`;
+
+        const maxScore = totalQuestions * 30;
+        const percentage = (score / maxScore) * 100;
+        let message = "";
+
+        if (percentage >= 80)
+            message = "Uitstekend! Je kent je chemische combinaties heel goed!";
+        else if (percentage >= 60)
+            message = "Goed gedaan! Met wat meer oefening word je nog beter!";
+        else if (percentage >= 40)
+            message = "Niet slecht, maar je kunt nog wat meer oefenen!";
+        else message = "Blijf oefenen, je wordt vanzelf beter!";
+
+
         document.getElementById("finalMessage").textContent = message;
 
         fetch("https://chem-edu-quest.vercel.app/api/save-score", {
@@ -398,6 +465,9 @@
             .then(data => loadLeaderboard())
             .catch(err => console.error("Fout bij opslaan score:", err));
     }
+
+
+
 
     document.getElementById("restartButton").addEventListener("click", () => {
         document.getElementById("endScreen").style.display = "none";
@@ -411,13 +481,14 @@
             .then(data => {
                 const tbody = document.querySelector("#scoreboard tbody");
                 tbody.innerHTML = "";
-                data.forEach(entry => {
+                data.slice(0, 5).forEach(entry => {
                     const row = document.createElement("tr");
                     row.innerHTML = `
-              <td>${entry.name}</td>
-              <td>${entry.score}</td>
-              <td>${new Date(entry.createdAt).toLocaleDateString("nl-BE")}</td>
-            `;
+
+                    <td>${entry.name}</td>
+                    <td>${entry.score}</td>
+                    <td>${new Date(entry.createdAt).toLocaleDateString("nl-BE")}</td>`;
+
                     tbody.appendChild(row);
                 });
             })
@@ -426,10 +497,21 @@
             });
     }
 
-    // ✅ Zorg dat leaderboard meteen bij pagina-opstart laadt
-    window.addEventListener("load", loadLeaderboard);
-</script>
 
+    window.addEventListener("load", () => {
+        loadLeaderboard(); // bij pagina openen
+    });
+
+    document.getElementById("startButton").addEventListener("click", () => {
+        loadLeaderboard(); // bij starten quiz
+    });
+
+    document.getElementById("restartButton").addEventListener("click", () => {
+        loadLeaderboard(); // bij herstart
+    });
+
+
+</script>
 <a href="./index.html" id="playgroundButton">Playground</a>
 </body>
 </html>
