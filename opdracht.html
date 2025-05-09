@@ -157,26 +157,28 @@
             background-color: #512da8;
         }
 
-        #leaderboard {
-            margin-top: 30px;
-            transition: color 0.3s ease;
-        }
-
         #leaderboard table {
-            margin: 0 auto;
-            border-collapse: collapse;
-            width: 100%;
-            max-width: 600px;
-            background-color: transparent;
+            background-color: #fff;
+            color: #000;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        #leaderboard th, #leaderboard td {
-            padding: 10px;
+        #leaderboard th {
+            background-color: #0288d1;
+            color: white;
+            padding: 12px;
+            border-bottom: 2px solid #ddd;
         }
+
+        #leaderboard td {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
     </style>
 </head>
 <body>
-
 <div id="startScreen">
     <div class="screen-content">
         <h1>Chemische Combinaties Quiz</h1>
@@ -191,16 +193,22 @@
 
 <div id="quizArea" style="display: none">
     <h1>Chemische Combinaties Quiz</h1>
+
     <div id="quizInfo">
         <div id="timer">Tijd: 30s</div>
         <div id="score">Score: 0</div>
         <div id="lives">
-            Levens: <span class="life">♥</span><span class="life">♥</span><span class="life">♥</span>
+            Levens: <span class="life">♥</span><span class="life">♥</span
+        ><span class="life">♥</span>
         </div>
     </div>
+
     <div id="question">Vraag zal hier verschijnen...</div>
+
     <div class="container" id="elementGrid"></div>
+
     <button id="submitButton">Bevestigen</button>
+
     <div id="result"></div>
 </div>
 
@@ -212,10 +220,9 @@
         <button class="screen-button" id="restartButton">Opnieuw Spelen</button>
     </div>
 </div>
-
-<div id="leaderboard">
+<div id="leaderboard" style="margin-top: 30px;">
     <h2>Top Scores</h2>
-    <table id="scoreboard">
+    <table id="scoreboard" style="margin: 0 auto; border-collapse: collapse; width: 100%; max-width: 600px; background-color: white; color: black;">
         <thead>
         <tr>
             <th>Naam</th>
@@ -223,22 +230,63 @@
             <th>Datum</th>
         </tr>
         </thead>
-        <tbody></tbody>
+        <tbody>
+        </tbody>
     </table>
 </div>
 
+</div>
+
 <script>
-    // Vervang hieronder met je eigen `elements` en `combinations`
-    const elements = ["H", "O", "C", "N", "Cl", "Na"]; // kort voorbeeld
+    // Elementen en combinaties
+    const elements = ["H", "He", "Li", "Be", "B", "C", "N", "O", "F", "Ne", "Na", "Mg", "Al", "Si", "P", "S", "Cl", "Ar", "K", "Ca", "Sc", "Ti", "V", "Cr", "Mn", "Fe", "Co", "Ni", "Cu", "Zn", "Ga", "Ge", "As", "Se", "Br", "Kr", "Rb", "Sr", "Y", "Zr", "Nb", "Mo", "Tc", "Ru", "Rh", "Pd", "Ag", "Cd", "In", "Sn", "Sb", "Te", "I", "Xe", "Cs", "Ba", "Hf", "Ta", "W", "Re", "Os", "Ir", "Pt", "Au", "Hg", "Tl", "Pb", "Bi", "Po", "At", "Rn"];
+
     const combinations = {
-        "H,O": { name: "Water" },
-        "C,O": { name: "Koolstofdioxide" },
-        "Na,Cl": { name: "Keukenzout" }
+        "H,O": {"name": "Water"},
+        "C,O": {"name": "Koolstofdioxide"},
+        "Na,Cl": {"name": "Keukenzout"},
+        "Fe,O": {"name": "IJzeroxide"},
+        "Fe,C": {"name": "Staal"}, // Legering
+        "Cu,Zn": {"name": "Messing"},
+        "H,N": {"name": "Ammoniak"},
+        "C,H": {"name": "Methaan"},
+        "H,Cl": {"name": "Waterstofchloride"},
+        "Mg,O": {"name": "Magnesiumoxide"},
+        "K,Cl": {"name": "Kaliumchloride"},
+        "Zn,O": {"name": "Zinkoxide"},
+        "Ag,Br": {"name": "Zilverbromide"},
+        "Ti,O": {"name": "Titaandioxide"},
+        "C,H,O": {"name": "Glucose"},
+        "Ca,C,O": {"name": "Calciumcarbonaat"},
+        "N,H,O": {"name": "Salpeterzuur"},
+        "Na,H,C,O": {"name": "Natriumbicarbonaat"},
+        "Ba,O,S": {"name": "Bariumsulfaat"},
+        "Al,O": {"name": "Aluminiumoxide"},
+        "Si,O": {"name": "Silica"},
+        "S,O": {"name": "Zwaveldioxide"},
+        "Pb,O": {"name": "Loodoxide"},
+        "Hg,Cl": {"name": "Kwikchloride"},
+        "Au,Ag": {"name": "Elektrum"}, // Legering
+        "Ni,Cr": {"name": "Nichroom"}, // Legering
+        "Cu,Sn": {"name": "Brons"}, // Legering
+        "W,C": {"name": "Wolfraamcarbide"},
+
     };
 
-    let playerName = "", quizEnded = false, selected = [], currentQuestion = {}, score = 0, lives = 3, timeLeft = 30, timer, questionsAnswered = 0;
+
+    // Quiz variabelen
+    let playerName = "";
+    let quizEnded = false;
+    let selected = [];
+    let currentQuestion = {};
+    let score = 0;
+    let lives = 3;
+    let timeLeft = 30;
+    let timer;
+    let questionsAnswered = 0;
     const totalQuestions = 10;
 
+    // Elementen grid opbouwen
     const grid = document.getElementById("elementGrid");
     elements.forEach(el => {
         const div = document.createElement("div");
@@ -247,92 +295,99 @@
         div.dataset.symbol = el;
         div.addEventListener("click", () => {
             if (div.classList.contains("disabled")) return;
-            const i = selected.indexOf(el);
-            if (i > -1) { selected.splice(i, 1); div.classList.remove("selected"); }
-            else { selected.push(el); div.classList.add("selected"); }
+
+            const symbol = div.dataset.symbol;
+            const i = selected.indexOf(symbol);
+
+            if (i > -1) {
+                selected.splice(i, 1);
+                div.classList.remove("selected");
+            } else {
+                selected.push(symbol);
+                div.classList.add("selected");
+            }
         });
         grid.appendChild(div);
     });
 
+    // Startscherm
     document.getElementById("startButton").addEventListener("click", () => {
         const input = document.getElementById("playerName").value.trim();
-        if (input === "") return alert("Vul eerst je naam in!");
+        if (input === "") {
+            alert("Vul eerst je naam in!");
+            return;
+        }
         playerName = input;
         document.getElementById("startScreen").style.display = "none";
         document.getElementById("quizArea").style.display = "block";
-        setLeaderboardColor("light");
         startQuiz();
     });
 
-    document.getElementById("submitButton").addEventListener("click", () => {
-        clearInterval(timer);
-        checkAnswer();
-    });
 
-    document.getElementById("restartButton").addEventListener("click", () => {
-        document.getElementById("endScreen").style.display = "none";
-        document.getElementById("quizArea").style.display = "block";
-        setLeaderboardColor("light");
-        startQuiz();
-    });
 
-    function setLeaderboardColor(mode) {
-        document.getElementById("leaderboard").style.color = mode === "dark" ? "white" : "black";
-    }
-
+    // Quiz functies
     function startQuiz() {
-        score = 0; lives = 3; questionsAnswered = 0; quizEnded = false;
-        updateScore(); updateLives(); nextQuestion();
+        quizEnded = false;
+        score = 0;
+        lives = 3;
+        questionsAnswered = 0;
+        updateScore();
+        updateLives();
+        nextQuestion();
     }
+
 
     function nextQuestion() {
         selected = [];
-        document.querySelectorAll(".element").forEach(el => el.classList.remove("selected", "disabled"));
-        const keys = Object.keys(combinations);
-        const random = keys[Math.floor(Math.random() * keys.length)];
-        currentQuestion = { answer: random.split(","), name: combinations[random].name };
-        document.getElementById("question").textContent = `Welke elementen vormen ${currentQuestion.name}? (Selecteer ${currentQuestion.answer.length})`;
-        resetTimer(); startTimer();
-    }
+        document.querySelectorAll(".element").forEach((el) => {
+            el.classList.remove("selected", "disabled");
+        });
 
-    function checkAnswer() {
-        const userAnswer = [...selected].sort().join(",");
-        const correctAnswer = [...currentQuestion.answer].sort().join(",");
-        if (userAnswer === correctAnswer) {
-            score += timeLeft;
-            questionsAnswered++;
-            document.getElementById("result").textContent = "Correct! 🎉";
-            updateScore();
-        } else {
-            document.getElementById("result").innerHTML = `Fout. Antwoord: <span id="correctAnswer">${currentQuestion.answer.join(" + ")}</span>`;
-            loseLife();
-        }
-        if (lives > 0 && questionsAnswered < totalQuestions) setTimeout(nextQuestion, 2000);
-    }
+        const comboKeys = Object.keys(combinations);
+        const randomKey =
+            comboKeys[Math.floor(Math.random() * comboKeys.length)];
+        currentQuestion = {
+            answer: randomKey.split(","),
+            name: combinations[randomKey].name,
+        };
 
-    function loseLife() {
-        lives--; updateLives();
-        if (lives <= 0) endQuiz();
+        const aantal = currentQuestion.answer.length;
+        document.getElementById(
+            "question"
+        ).textContent = `Welke elementen vormen ${
+            currentQuestion.name
+        }? (Selecteer ${aantal} element${aantal > 1 ? "en" : ""})`;
+
+        resetTimer();
+        startTimer();
     }
 
     function startTimer() {
         clearInterval(timer);
-        timeLeft = 30; updateTimer();
+        timeLeft = 30;
+        updateTimer();
         timer = setInterval(() => {
-            timeLeft--; updateTimer();
-            if (timeLeft <= 0) timeUp();
+            timeLeft--;
+            updateTimer();
+            if (timeLeft <= 0) {
+                timeUp();
+            }
         }, 1000);
     }
 
     function resetTimer() {
         clearInterval(timer);
-        timeLeft = 30; updateTimer();
+        timeLeft = 30;
+        updateTimer();
     }
 
     function updateTimer() {
-        const t = document.getElementById("timer");
-        t.textContent = `Tijd: ${timeLeft}s`;
-        t.style.color = timeLeft <= 10 ? "red" : "black";
+        document.getElementById("timer").textContent = `Tijd: ${timeLeft}s`;
+        if (timeLeft <= 10) {
+            document.getElementById("timer").style.color = "red";
+        } else {
+            document.getElementById("timer").style.color = "black";
+        }
     }
 
     function updateScore() {
@@ -340,20 +395,62 @@
     }
 
     function updateLives() {
-        const el = document.getElementById("lives");
-        el.innerHTML = "Levens: ";
+        const livesElement = document.getElementById("lives");
+        livesElement.innerHTML = "Levens: ";
         for (let i = 0; i < 3; i++) {
-            const span = document.createElement("span");
-            span.className = "life";
-            span.textContent = i < lives ? "♥" : "♡";
-            el.appendChild(span);
+            const heart = document.createElement("span");
+            heart.className = "life";
+            heart.textContent = i < lives ? "♥" : "♡";
+            livesElement.appendChild(heart);
         }
     }
 
     function timeUp() {
         clearInterval(timer);
-        document.getElementById("result").innerHTML = `Tijd is op! Antwoord: <span id="correctAnswer">${currentQuestion.answer.join(" + ")}</span>`;
+        document.getElementById(
+            "result"
+        ).innerHTML = `Tijd is om! Het juiste antwoord was: <span id="correctAnswer">${currentQuestion.answer.join(
+            " + "
+        )}</span>`;
         loseLife();
+    }
+
+    document.getElementById("submitButton").addEventListener("click", () => {
+        clearInterval(timer);
+        checkAnswer();
+    });
+
+    function checkAnswer() {
+        const userAnswer = [...selected].sort().join(",");
+        const correctAnswer = [...currentQuestion.answer].sort().join(",");
+
+        if (userAnswer === correctAnswer) {
+            score += timeLeft;
+            questionsAnswered++;
+            document.getElementById("result").innerHTML = "Correct! 🎉";
+            updateScore();
+        } else {
+            document.getElementById(
+                "result"
+            ).innerHTML = `Helaas, fout. Het juiste antwoord was: <span id="correctAnswer">${currentQuestion.answer.join(
+                " + "
+            )}</span>`;
+            loseLife();
+        }
+
+        if (lives > 0 && questionsAnswered < totalQuestions) {
+            setTimeout(nextQuestion, 2000);
+        }
+
+    }
+
+
+    function loseLife() {
+        lives--;
+        updateLives();
+        if (lives <= 0) {
+            endQuiz();
+        }
     }
 
     function endQuiz() {
@@ -362,43 +459,92 @@
         clearInterval(timer);
         document.getElementById("quizArea").style.display = "none";
         document.getElementById("endScreen").style.display = "flex";
-        document.getElementById("finalScore").textContent = `Je eindscore: ${score}`;
-        setLeaderboardColor("dark");
+        document.getElementById(
+            "finalScore"
+        ).textContent = `Je eindscore: ${score}`;
+
+        const maxScore = totalQuestions * 30;
+        const percentage = (score / maxScore) * 100;
+        let message = "";
+
+        if (percentage >= 80)
+            message = "Uitstekend! Je kent je chemische combinaties heel goed!";
+        else if (percentage >= 60)
+            message = "Goed gedaan! Met wat meer oefening word je nog beter!";
+        else if (percentage >= 40)
+            message = "Niet slecht, maar je kunt nog wat meer oefenen!";
+        else message = "Blijf oefenen, je wordt vanzelf beter!";
+
+        document.getElementById("finalMessage").textContent = message;
+
+        console.log("Verstuur naar database:", playerName, score);
 
         fetch("https://chem-edu-quest.vercel.app/api/save-score", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name: playerName, score })
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: playerName,
+                score: score
+            })
         })
             .then(res => res.json())
-            .then(() => loadLeaderboard())
+            .then(data => {
+                console.log("Respons van API:", data);
+                loadLeaderboard();
+            })
             .catch(err => console.error("Fout bij opslaan score:", err));
+
+
     }
+
+
+    document.getElementById("restartButton").addEventListener("click", () => {
+        document.getElementById("endScreen").style.display = "none";
+        document.getElementById("quizArea").style.display = "block";
+        startQuiz();
+
+    });
+    document.getElementById("playgroundButton").addEventListener("click", function () {
+        window.location.href = "../Chemify/oefen.html";
+    });
 
     function loadLeaderboard() {
         fetch("https://chem-edu-quest.vercel.app/api/get-score")
-            .then(res => res.json())
+            .then(response => response.json())
             .then(data => {
                 const tbody = document.querySelector("#scoreboard tbody");
                 tbody.innerHTML = "";
-                data.forEach(entry => {
+                data.slice(0, 5).forEach(entry => {
                     const row = document.createElement("tr");
                     row.innerHTML = `
-              <td>${entry.name}</td>
-              <td>${entry.score}</td>
-              <td>${new Date(entry.createdAt).toLocaleDateString("nl-BE")}</td>`;
+                    <td>${entry.name}</td>
+                    <td>${entry.score}</td>
+                    <td>${new Date(entry.createdAt).toLocaleDateString("nl-BE")}</td>`;
                     tbody.appendChild(row);
                 });
             })
-            .catch(err => console.error("Fout bij leaderboard:", err));
+            .catch(err => {
+                console.error("Fout bij leaderboard:", err);
+            });
     }
 
     window.addEventListener("load", () => {
-        loadLeaderboard();
-        setLeaderboardColor("dark");
+        loadLeaderboard(); // bij pagina openen
     });
-</script>
 
+    document.getElementById("startButton").addEventListener("click", () => {
+        loadLeaderboard(); // bij starten quiz
+    });
+
+    document.getElementById("restartButton").addEventListener("click", () => {
+        loadLeaderboard(); // bij herstart
+    });
+
+
+</script>
 <a href="./index.html" id="playgroundButton">Playground</a>
+
 </body>
 </html>
