@@ -156,6 +156,28 @@
         #playgroundButton:hover {
             background-color: #512da8;
         }
+
+
+
+        #leaderboard table {
+            background-color: #fff;
+            color: #000;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #leaderboard th {
+            background-color: #0288d1;
+            color: white;
+            padding: 12px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        #leaderboard td {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
     </style>
 </head>
 <body>
@@ -173,7 +195,6 @@
 
 <div id="quizArea" style="display: none">
     <h1>Chemische Combinaties Quiz</h1>
-
     <div id="quizInfo">
         <div id="timer">Tijd: 30s</div>
         <div id="score">Score: 0</div>
@@ -200,6 +221,7 @@
         <button class="screen-button" id="restartButton">Opnieuw Spelen</button>
     </div>
 </div>
+
 <div id="leaderboard" style="margin-top: 30px;">
     <h2>Top Scores</h2>
     <table id="scoreboard" style="margin: 0 auto; border-collapse: collapse; width: 100%; max-width: 600px; background-color: white; color: black;">
@@ -215,46 +237,25 @@
     </table>
 </div>
 
+
+<div id="leaderboard">
+    <h2>Top Scores</h2>
+    <table id="scoreboard">
+        <thead>
+        <tr>
+            <th>Naam</th>
+            <th>Score</th>
+            <th>Datum</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 </div>
 
 <script>
-    // Elementen en combinaties
-    const elements = ["H", "He", "Li", "Be", "B", "C", "N", "O", "F", "Ne", "Na", "Mg", "Al", "Si", "P", "S", "Cl", "Ar", "K", "Ca", "Sc", "Ti", "V", "Cr", "Mn", "Fe", "Co", "Ni", "Cu", "Zn", "Ga", "Ge", "As", "Se", "Br", "Kr", "Rb", "Sr", "Y", "Zr", "Nb", "Mo", "Tc", "Ru", "Rh", "Pd", "Ag", "Cd", "In", "Sn", "Sb", "Te", "I", "Xe", "Cs", "Ba", "Hf", "Ta", "W", "Re", "Os", "Ir", "Pt", "Au", "Hg", "Tl", "Pb", "Bi", "Po", "At", "Rn"];
+    const elements = [...]; // Je originele element array
+    const combinations = {...}; // Je originele combinatie object
 
-    const combinations = {
-        "H,O": {"name": "Water"},
-        "C,O": {"name": "Koolstofdioxide"},
-        "Na,Cl": {"name": "Keukenzout"},
-        "Fe,O": {"name": "IJzeroxide"},
-        "Fe,C": {"name": "Staal"}, // Legering
-        "Cu,Zn": {"name": "Messing"},
-        "H,N": {"name": "Ammoniak"},
-        "C,H": {"name": "Methaan"},
-        "H,Cl": {"name": "Waterstofchloride"},
-        "Mg,O": {"name": "Magnesiumoxide"},
-        "K,Cl": {"name": "Kaliumchloride"},
-        "Zn,O": {"name": "Zinkoxide"},
-        "Ag,Br": {"name": "Zilverbromide"},
-        "Ti,O": {"name": "Titaandioxide"},
-        "C,H,O": {"name": "Glucose"},
-        "Ca,C,O": {"name": "Calciumcarbonaat"},
-        "N,H,O": {"name": "Salpeterzuur"},
-        "Na,H,C,O": {"name": "Natriumbicarbonaat"},
-        "Ba,O,S": {"name": "Bariumsulfaat"},
-        "Al,O": {"name": "Aluminiumoxide"},
-        "Si,O": {"name": "Silica"},
-        "S,O": {"name": "Zwaveldioxide"},
-        "Pb,O": {"name": "Loodoxide"},
-        "Hg,Cl": {"name": "Kwikchloride"},
-        "Au,Ag": {"name": "Elektrum"}, // Legering
-        "Ni,Cr": {"name": "Nichroom"}, // Legering
-        "Cu,Sn": {"name": "Brons"}, // Legering
-        "W,C": {"name": "Wolfraamcarbide"},
-
-    };
-
-
-    // Quiz variabelen
     let playerName = "";
     let quizEnded = false;
     let selected = [];
@@ -266,7 +267,6 @@
     let questionsAnswered = 0;
     const totalQuestions = 10;
 
-    // Elementen grid opbouwen
     const grid = document.getElementById("elementGrid");
     elements.forEach(el => {
         const div = document.createElement("div");
@@ -275,6 +275,7 @@
         div.dataset.symbol = el;
         div.addEventListener("click", () => {
             if (div.classList.contains("disabled")) return;
+
 
             const symbol = div.dataset.symbol;
             const i = selected.indexOf(symbol);
@@ -290,22 +291,15 @@
         grid.appendChild(div);
     });
 
-    // Startscherm
     document.getElementById("startButton").addEventListener("click", () => {
         const input = document.getElementById("playerName").value.trim();
-        if (input === "") {
-            alert("Vul eerst je naam in!");
-            return;
-        }
+        if (input === "") return alert("Vul eerst je naam in!");
         playerName = input;
         document.getElementById("startScreen").style.display = "none";
         document.getElementById("quizArea").style.display = "block";
         startQuiz();
     });
 
-
-
-    // Quiz functies
     function startQuiz() {
         quizEnded = false;
         score = 0;
@@ -316,7 +310,6 @@
         nextQuestion();
     }
 
-
     function nextQuestion() {
         selected = [];
         document.querySelectorAll(".element").forEach((el) => {
@@ -326,12 +319,13 @@
         const comboKeys = Object.keys(combinations);
         const randomKey =
             comboKeys[Math.floor(Math.random() * comboKeys.length)];
+
         currentQuestion = {
             answer: randomKey.split(","),
             name: combinations[randomKey].name,
         };
-
         const aantal = currentQuestion.answer.length;
+
         document.getElementById(
             "question"
         ).textContent = `Welke elementen vormen ${
@@ -352,6 +346,7 @@
             if (timeLeft <= 0) {
                 timeUp();
             }
+
         }, 1000);
     }
 
@@ -362,12 +357,14 @@
     }
 
     function updateTimer() {
+
         document.getElementById("timer").textContent = `Tijd: ${timeLeft}s`;
         if (timeLeft <= 10) {
             document.getElementById("timer").style.color = "red";
         } else {
             document.getElementById("timer").style.color = "black";
         }
+
     }
 
     function updateScore() {
@@ -387,11 +384,13 @@
 
     function timeUp() {
         clearInterval(timer);
+
         document.getElementById(
             "result"
         ).innerHTML = `Tijd is om! Het juiste antwoord was: <span id="correctAnswer">${currentQuestion.answer.join(
             " + "
         )}</span>`;
+
         loseLife();
     }
 
@@ -403,26 +402,25 @@
     function checkAnswer() {
         const userAnswer = [...selected].sort().join(",");
         const correctAnswer = [...currentQuestion.answer].sort().join(",");
-
         if (userAnswer === correctAnswer) {
             score += timeLeft;
             questionsAnswered++;
             document.getElementById("result").innerHTML = "Correct! 🎉";
             updateScore();
         } else {
+
             document.getElementById(
                 "result"
             ).innerHTML = `Helaas, fout. Het juiste antwoord was: <span id="correctAnswer">${currentQuestion.answer.join(
                 " + "
             )}</span>`;
+
             loseLife();
         }
-
-        if (lives > 0 && questionsAnswered < totalQuestions) {
+        if (lives > 0 && questionsAnswered < totalQuestions)
             setTimeout(nextQuestion, 2000);
-        }
-
     }
+
 
 
     function loseLife() {
@@ -431,6 +429,7 @@
         if (lives <= 0) {
             endQuiz();
         }
+
     }
 
     function endQuiz() {
@@ -439,6 +438,7 @@
         clearInterval(timer);
         document.getElementById("quizArea").style.display = "none";
         document.getElementById("endScreen").style.display = "flex";
+
         document.getElementById(
             "finalScore"
         ).textContent = `Je eindscore: ${score}`;
@@ -455,39 +455,26 @@
             message = "Niet slecht, maar je kunt nog wat meer oefenen!";
         else message = "Blijf oefenen, je wordt vanzelf beter!";
 
-        document.getElementById("finalMessage").textContent = message;
 
-        console.log("Verstuur naar database:", playerName, score);
+        document.getElementById("finalMessage").textContent = message;
 
         fetch("https://chem-edu-quest.vercel.app/api/save-score", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                name: playerName,
-                score: score
-            })
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name: playerName, score: score })
         })
             .then(res => res.json())
-            .then(data => {
-                console.log("Respons van API:", data);
-                loadLeaderboard();
-            })
+            .then(data => loadLeaderboard())
             .catch(err => console.error("Fout bij opslaan score:", err));
-
-
     }
+
+
 
 
     document.getElementById("restartButton").addEventListener("click", () => {
         document.getElementById("endScreen").style.display = "none";
         document.getElementById("quizArea").style.display = "block";
         startQuiz();
-
-    });
-    document.getElementById("playgroundButton").addEventListener("click", function () {
-        window.location.href = "../Chemify/oefen.html";
     });
 
     function loadLeaderboard() {
@@ -499,9 +486,11 @@
                 data.forEach(entry => {
                     const row = document.createElement("tr");
                     row.innerHTML = `
+
                     <td>${entry.name}</td>
                     <td>${entry.score}</td>
                 `;
+
                     tbody.appendChild(row);
                 });
             })
@@ -509,6 +498,21 @@
                 console.error("Fout bij leaderboard:", err);
             });
     }
+
+
+
+    window.addEventListener("load", () => {
+        loadLeaderboard(); // bij pagina openen
+    });
+
+    document.getElementById("startButton").addEventListener("click", () => {
+        loadLeaderboard(); // bij starten quiz
+    });
+
+    document.getElementById("restartButton").addEventListener("click", () => {
+        loadLeaderboard(); // bij herstart
+    });
+
 
 </script>
 <a href="./index.html" id="playgroundButton">Playground</a>
