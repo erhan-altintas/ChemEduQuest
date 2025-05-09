@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "api/save-score.js", "use": "@vercel/node" },
+    { "src": "api/get-score.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/api/save-score", "dest": "api/save-score.js" },
+    { "src": "/api/get-score", "dest": "api/get-score.js" }
+  ]
+}
