@@ -156,6 +156,12 @@
         #playgroundButton:hover {
             background-color: #512da8;
         }
+
+        #leaderboard {
+            color: white; /* standaard: wit */
+            transition: color 0.3s ease;
+        }
+
     </style>
 </head>
 <body>
@@ -218,6 +224,12 @@
 </div>
 
 <script>
+
+    window.addEventListener("load", () => {
+        loadLeaderboard();
+        setLeaderboardColor("dark"); // wit
+    });
+
     // Elementen en combinaties
     const elements = ["H", "He", "Li", "Be", "B", "C", "N", "O", "F", "Ne", "Na", "Mg", "Al", "Si", "P", "S", "Cl", "Ar", "K", "Ca", "Sc", "Ti", "V", "Cr", "Mn", "Fe", "Co", "Ni", "Cu", "Zn", "Ga", "Ge", "As", "Se", "Br", "Kr", "Rb", "Sr", "Y", "Zr", "Nb", "Mo", "Tc", "Ru", "Rh", "Pd", "Ag", "Cd", "In", "Sn", "Sb", "Te", "I", "Xe", "Cs", "Ba", "Hf", "Ta", "W", "Re", "Os", "Ir", "Pt", "Au", "Hg", "Tl", "Pb", "Bi", "Po", "At", "Rn"];
 
@@ -300,6 +312,7 @@
         playerName = input;
         document.getElementById("startScreen").style.display = "none";
         document.getElementById("quizArea").style.display = "block";
+        setLeaderboardColor("light"); // zwart
         startQuiz();
     });
 
@@ -438,6 +451,7 @@
         quizEnded = true;
         clearInterval(timer);
         document.getElementById("quizArea").style.display = "none";
+        setLeaderboardColor("dark"); // wit
         document.getElementById("endScreen").style.display = "flex";
         document.getElementById(
             "finalScore"
@@ -483,6 +497,7 @@
     document.getElementById("restartButton").addEventListener("click", () => {
         document.getElementById("endScreen").style.display = "none";
         document.getElementById("quizArea").style.display = "block";
+        setLeaderboardColor("light"); // zwart
         startQuiz();
 
     });
@@ -509,6 +524,12 @@
                 console.error("Fout bij leaderboard:", err);
             });
     }
+
+    function setLeaderboardColor(mode) {
+        const leaderboard = document.getElementById("leaderboard");
+        leaderboard.style.color = mode === "dark" ? "white" : "black";
+    }
+
 
 </script>
 <a href="./index.html" id="playgroundButton">Playground</a>
