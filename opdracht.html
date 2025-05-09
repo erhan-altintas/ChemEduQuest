@@ -158,6 +158,7 @@
         }
 
 
+
         #leaderboard table {
             background-color: #fff;
             color: #000;
@@ -176,6 +177,7 @@
             padding: 10px;
             border-bottom: 1px solid #ccc;
         }
+
     </style>
 </head>
 <body>
@@ -481,13 +483,13 @@
             .then(data => {
                 const tbody = document.querySelector("#scoreboard tbody");
                 tbody.innerHTML = "";
-                data.slice(0, 5).forEach(entry => {
+                data.forEach(entry => {
                     const row = document.createElement("tr");
                     row.innerHTML = `
 
                     <td>${entry.name}</td>
                     <td>${entry.score}</td>
-                    <td>${new Date(entry.createdAt).toLocaleDateString("nl-BE")}</td>`;
+                `;
 
                     tbody.appendChild(row);
                 });
@@ -496,6 +498,7 @@
                 console.error("Fout bij leaderboard:", err);
             });
     }
+
 
 
     window.addEventListener("load", () => {
@@ -513,5 +516,6 @@
 
 </script>
 <a href="./index.html" id="playgroundButton">Playground</a>
+
 </body>
 </html>
