@@ -213,7 +213,6 @@
         <tr>
             <th>Naam</th>
             <th>Score</th>
-            <th>Datum</th>
         </tr>
         </thead>
         <tbody>
@@ -523,6 +522,8 @@
             .catch(err => {
                 console.error("Fout bij leaderboard:", err);
             });
+        console.log("Top 5 scores geladen:", data.slice(0, 5));
+
     }
 
     function setLeaderboardColor(mode) {
