@@ -184,6 +184,36 @@
         border: 1px solid #ccc;
         border-radius: 3px;
       }
+
+      #playgroundButton {
+        padding: 18px 36px;
+        font-size: 18px;
+        font-weight: 700;
+        color: white;
+        background: linear-gradient(
+          135deg,
+          #6366f1,
+          #8b5cf6
+        ); /* indigo to violet */
+        border: none;
+        border-radius: 16px;
+        cursor: pointer;
+        box-shadow: 0 8px 20px rgba(139, 92, 246, 0.35);
+        transition: all 0.3s ease;
+        margin-top: 100px;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        animation: pulseGlow 2s infinite ease-in-out;
+        text-decoration: none;
+      }
+      #playgroundButton:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 24px rgba(139, 92, 246, 0.5);
+      }
+      #playgroundButton:active {
+        transform: scale(0.98);
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+      }
     </style>
   </head>
   <body>
@@ -261,6 +291,9 @@
     <button id="showCombinationsBtn">Toon alle mogelijke combinaties</button>
 
     <div id="result"></div>
+    <div style="margin-top: 15px; text-align: center">
+      <a href="./opdracht.html" id="playgroundButton">Klaar voor de quiz!</a>
+    </div>
 
     <!-- Popup voor alle combinaties -->
     <div id="combinationsPopup" class="popup">
