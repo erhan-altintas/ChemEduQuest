@@ -208,7 +208,7 @@
 </div>
 <div id="leaderboard" style="margin-top: 30px;">
     <h2>Top Scores</h2>
-    <table id="scoreboard" style="margin: 0 auto; border-collapse: collapse; width: 100%; max-width: 600px; background-color: white; color: black;">
+    <table id="scoreboard" style="margin: 0 auto; border-collapse: collapse; width: 100%; max-width: 600px; background-color: white;">
         <thead>
         <tr>
             <th>Naam</th>
@@ -511,7 +511,7 @@
             .then(data => {
                 const tbody = document.querySelector("#scoreboard tbody");
                 tbody.innerHTML = "";
-                data.forEach(entry => {
+                data.slice(0, 5).forEach(entry => {
                     const row = document.createElement("tr");
                     row.innerHTML = `
                     <td>${entry.name}</td>
