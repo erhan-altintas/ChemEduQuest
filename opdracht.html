@@ -165,6 +165,7 @@
         #leaderboard th,
         #leaderboard td {
             color: inherit;
+            background-color: transparent;
         }
 
 
@@ -214,7 +215,7 @@
 </div>
 <div id="leaderboard" style="margin-top: 30px;">
     <h2>Top Scores</h2>
-    <table id="scoreboard" style="margin: 0 auto; border-collapse: collapse; width: 100%; max-width: 600px; background-color: white;">
+    <table id="scoreboard" style="margin: 0 auto; border-collapse: collapse; width: 100%; max-width: 600px;">
         <thead>
         <tr>
             <th>Naam</th>
@@ -317,7 +318,8 @@
         playerName = input;
         document.getElementById("startScreen").style.display = "none";
         document.getElementById("quizArea").style.display = "block";
-        setLeaderboardColor("light"); // zwart
+        setLeaderboardColor("dark");
+
         startQuiz();
     });
 
