@@ -2,402 +2,636 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ChemEduQuest - Quiz Modus</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --danger: #f72585;
+            --success: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        #mainLayout {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        #leaderboard {
+            flex: 1;
+            max-width: 350px;
+            background: white;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            position: sticky;
+            top: 30px;
+        }
+
+        #leaderboard h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        #leaderboard h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 3px;
+        }
+
+        #scoreboard {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+
+        #scoreboard th {
+            text-align: left;
+            padding: 10px 15px;
+            color: var(--gray);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        #scoreboard td {
+            padding: 15px;
+            background: rgba(67, 97, 238, 0.05);
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        #scoreboard tr:first-child td {
+            background: rgba(67, 97, 238, 0.15);
+            font-weight: 600;
+        }
+
+        #scoreboard tr:first-child td:first-child {
+            position: relative;
+        }
+
+        #scoreboard tr:first-child td:first-child::before {
+            content: '👑';
+            position: absolute;
+            left: -5px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+        }
+
+        #centerContent {
+            flex: 2;
+            min-width: 0;
+        }
+
+        .screen-content {
+            background: white;
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
             text-align: center;
-            padding: 20px;
         }
 
-        .container {
-            display: grid;
-            grid-template-columns: repeat(18, 1fr);
-            gap: 5px;
-            max-width: 1200px;
-            margin: 20px auto;
+        #startScreen h1 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            font-weight: 700;
         }
 
-        .element {
-            background-color: #fff;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            font-weight: bold;
-            cursor: pointer;
-            user-select: none;
+        #startScreen p {
+            color: var(--gray);
+            margin-bottom: 10px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .element:hover {
-            background-color: #eef;
-        }
-
-        .element.selected {
-            background-color: #b3e5fc;
-            border-color: #0288d1;
-        }
-
-        .element.disabled {
-            background-color: #eee;
-            color: #999;
-            border-color: #ccc;
-            pointer-events: none;
-        }
-
-        #submitButton {
-            margin-top: 15px;
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #0288d1;
+        .screen-button {
+            margin-top: 25px;
+            padding: 14px 30px;
+            font-size: 1rem;
+            background: var(--primary);
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 50px;
             cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+        }
+
+        .screen-button:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(67, 97, 238, 0.4);
+        }
+
+        #quizArea {
+            display: none;
+        }
+
+        #quizArea h1 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
         }
 
         #quizInfo {
             display: flex;
             justify-content: space-between;
-            max-width: 1200px;
-            margin: 0 auto 20px;
-            font-size: 18px;
+            font-size: 1rem;
+            background: white;
+            padding: 15px 25px;
+            border-radius: var(--border-radius);
+            margin-bottom: 25px;
+            box-shadow: var(--box-shadow);
         }
 
-        #timer,
-        #lives,
-        #score {
-            background-color: #fff;
-            padding: 10px 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        #quizInfo div {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #quizInfo span {
+            font-weight: 600;
+        }
+
+        #timer {
+            color: var(--danger);
         }
 
         #question {
-            font-size: 20px;
-            margin-bottom: 20px;
-            background-color: #fff;
-            padding: 15px;
-            border-radius: 5px;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
+            font-size: 1.2rem;
+            background: white;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            margin-bottom: 25px;
+            box-shadow: var(--box-shadow);
+            font-weight: 500;
         }
 
-        #result {
-            margin-top: 20px;
-            font-size: 18px;
-            min-height: 50px;
+        .container {
+            display: grid;
+            grid-template-columns: repeat(18, 1fr);
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
+        .element {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px 5px;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+            text-align: center;
+            transition: var(--transition);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .element:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent);
+        }
+
+        .element.selected {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .element.disabled {
+            background: #f8f9fa;
+            color: #adb5bd;
+            pointer-events: none;
+            opacity: 0.7;
         }
 
         .life {
-            color: red;
-            font-size: 24px;
-            margin: 0 3px;
+            color: var(--danger);
+            font-size: 1.3rem;
         }
 
-        #startScreen,
-        #endScreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            color: white;
-        }
-
-        .screen-content {
-            background-color: #333;
-            padding: 30px;
-            border-radius: 10px;
-            max-width: 600px;
-            text-align: center;
-        }
-
-        .screen-button {
-            margin-top: 20px;
-            padding: 12px 25px;
-            font-size: 18px;
-            background-color: #4caf50;
+        #submitButton {
+            padding: 12px 30px;
+            font-size: 1rem;
+            background: var(--primary);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 50px;
             cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+            display: block;
+            margin: 0 auto;
         }
 
-        #correctAnswer {
-            font-weight: bold;
-            color: #4caf50;
+        #submitButton:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(67, 97, 238, 0.4);
+        }
+
+        #result {
+            margin-top: 25px;
+            font-size: 1.1rem;
+            min-height: 50px;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            background: white;
+            box-shadow: var(--box-shadow);
         }
 
         #playgroundButton {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 12px 20px;
-            background-color: #673ab7;
+            bottom: 30px;
+            right: 30px;
+            padding: 15px 25px;
+            background: var(--primary);
             color: white;
             border: none;
-            border-radius: 30px;
-            font-size: 16px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            border-radius: 50px;
+            font-size: 1rem;
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3);
             cursor: pointer;
-            z-index: 1001;
-            transition: background-color 0.3s ease;
+            z-index: 100;
+            transition: var(--transition);
             text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         #playgroundButton:hover {
-            background-color: #512da8;
+            background: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(67, 97, 238, 0.4);
         }
 
-        #leaderboard {
-            color: white; /* standaard: wit */
-            transition: color 0.3s ease;
+        #correctAnswer {
+            font-weight: 600;
+            color: var(--success);
         }
 
-        #leaderboard th,
-        #leaderboard td {
-            color: inherit;
-            background-color: transparent;
+        input#playerName {
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 50px;
+            border: 2px solid #e9ecef;
+            margin-bottom: 20px;
+            width: 80%;
+            max-width: 400px;
+            transition: var(--transition);
         }
 
+        input#playerName:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
 
+        #endScreen h1 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        #finalScore {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        #finalMessage {
+            color: var(--gray);
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: repeat(10, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            #mainLayout {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            #leaderboard {
+                max-width: 100%;
+                width: 100%;
+                position: static;
+                margin-bottom: 30px;
+            }
+
+            .container {
+                grid-template-columns: repeat(8, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .screen-content {
+                padding: 30px 20px;
+            }
+
+            .container {
+                grid-template-columns: repeat(6, 1fr);
+                gap: 6px;
+            }
+
+            #quizInfo {
+                flex-direction: column;
+                gap: 10px;
+                padding: 15px;
+            }
+
+            #playgroundButton {
+                bottom: 20px;
+                right: 20px;
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .container {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Tooltip for elements */
+        .element-tooltip {
+            position: relative;
+        }
+
+        .element-tooltip::after {
+            content: attr(data-name);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--dark);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 10;
+        }
+
+        .element-tooltip:hover::after {
+            opacity: 1;
+            visibility: visible;
+            bottom: calc(100% + 5px);
+        }
     </style>
 </head>
 <body>
-<div id="startScreen">
-    <div class="screen-content">
-        <h1>Chemische Combinaties Quiz</h1>
-        <p>Test je kennis van chemische combinaties!</p>
-        <p>
-          Je krijgt een stof te zien en moet de juiste elementen selecteren.
-        </p>
-        <p>
-          Je hebt 3 levens en 30 seconden per vraag. Hoe meer vragen je correct
-          beantwoordt, hoe hoger je score!
-        </p>
-        <p>Vul je naam in om te beginnen:</p>
-        <input
-          type="text"
-          id="playerName"
-          placeholder="Jouw naam"
-          required
-          style="
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: none;
-            margin-bottom: 10px;
-          "
-        />
-        <button class="screen-button" id="startButton">Start Quiz</button>
+
+<div id="mainLayout">
+    <div id="leaderboard">
+        <h2>Top Scores</h2>
+        <div class="progress-container">
+            <div class="progress-bar" id="leaderboardProgress"></div>
+        </div>
+        <table id="scoreboard">
+            <thead>
+            <tr>
+                <th>Naam</th>
+                <th>Score</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
     </div>
-</div>
 
-<div id="quizArea" style="display: none">
-    <h1>Chemische Combinaties Quiz</h1>
+    <div id="centerContent">
+        <div id="startScreen">
+            <div class="screen-content fade-in">
+                <h1>Chemische Combinaties Quiz</h1>
+                <p>Test je kennis van chemische combinaties in deze interactieve quiz!</p>
+                <p>Selecteer de juiste elementen voor elke chemische stof die wordt getoond.</p>
 
-    <div id="quizInfo">
-        <div id="timer">Tijd: 30s</div>
-        <div id="score">Score: 0</div>
-        <div id="lives">
-            Levens: <span class="life">♥</span><span class="life">♥</span
-        ><span class="life">♥</span>
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: 0%"></div>
+                </div>
+
+                <p><strong>Spelregels:</strong></p>
+                <ul style="text-align: left; max-width: 500px; margin: 0 auto 20px; padding-left: 20px;">
+                    <li>Je hebt 3 levens</li>
+                    <li>30 seconden per vraag</li>
+                    <li>Hoe sneller je antwoordt, hoe meer punten</li>
+                    <li>10 vragen in totaal</li>
+                </ul>
+
+                <input type="text" id="playerName" placeholder="Jouw naam" required>
+                <br>
+                <button class="screen-button pulse" id="startButton">Start Quiz</button>
+            </div>
+        </div>
+
+        <div id="quizArea">
+            <h1 class="fade-in">Chemische Combinaties</h1>
+
+            <div id="quizInfo" class="fade-in">
+                <div><span>⏱️ Tijd:</span> <span id="timer">30s</span></div>
+                <div><span>🏆 Score:</span> <span id="score">0</span></div>
+                <div><span>❤️ Levens:</span> <span id="lives"><span class="life">♥</span><span class="life">♥</span><span class="life">♥</span></span></div>
+            </div>
+
+            <div id="question" class="fade-in">Vraag zal hier verschijnen...</div>
+            <div class="container" id="elementGrid"></div>
+            <button id="submitButton" class="fade-in">Bevestigen</button>
+            <div id="result" class="fade-in"></div>
+        </div>
+
+        <div id="endScreen" style="display: none">
+            <div class="screen-content fade-in">
+                <h1>Quiz Voltooid!</h1>
+                <div style="font-size: 5rem; margin: 20px 0;">
+                    🎉
+                </div>
+                <p id="finalScore">Je eindscore: 0</p>
+                <p id="finalMessage">Goed gedaan!</p>
+
+                <div class="progress-container">
+                    <div class="progress-bar" id="finalProgress"></div>
+                </div>
+
+                <button class="screen-button" id="restartButton">Opnieuw Spelen</button>
+            </div>
         </div>
     </div>
-
-    <div id="question">Vraag zal hier verschijnen...</div>
-
-    <div class="container" id="elementGrid"></div>
-
-    <button id="submitButton">Bevestigen</button>
-
-    <div id="result"></div>
 </div>
 
-<div id="endScreen" style="display: none">
-    <div class="screen-content">
-        <h1>Quiz Voltooid!</h1>
-        <p id="finalScore">Je eindscore: 0</p>
-        <p id="finalMessage">Goed gedaan!</p>
-        <button class="screen-button" id="restartButton">Opnieuw Spelen</button>
+<a href="./index.html" id="playgroundButton">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+    </svg>
+    Playground
+</a>
 
-      </div>
-    </div>
-    <div id="leaderboard" style="margin-top: 30px">
-      <h2>Top Scores</h2>
-      <table
-        id="scoreboard"
-        style="
-          margin: 0 auto;
-          border-collapse: collapse;
-          width: 100%;
-          max-width: 600px;
-          background-color: white;
-          color: orange;
-        "
-      >
-        <thead>
-          <tr>
-            <th>Naam</th>
-            <th>Score</th>
-            <th>Datum</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+<script>
+    // Element data with full names for tooltips
+    const elementsData = {
+        "H": "Waterstof", "He": "Helium", "Li": "Lithium", "Be": "Beryllium",
+        "B": "Boor", "C": "Koolstof", "N": "Stikstof", "O": "Zuurstof",
+        "F": "Fluor", "Ne": "Neon", "Na": "Natrium", "Mg": "Magnesium",
+        "Al": "Aluminium", "Si": "Silicium", "P": "Fosfor", "S": "Zwavel",
+        "Cl": "Chloor", "Ar": "Argon", "K": "Kalium", "Ca": "Calcium",
+        "Sc": "Scandium", "Ti": "Titanium", "V": "Vanadium", "Cr": "Chroom",
+        "Mn": "Mangaan", "Fe": "IJzer", "Co": "Kobalt", "Ni": "Nikkel",
+        "Cu": "Koper", "Zn": "Zink", "Ga": "Gallium", "Ge": "Germanium",
+        "As": "Arseen", "Se": "Seleen", "Br": "Broom", "Kr": "Krypton",
+        "Rb": "Rubidium", "Sr": "Strontium", "Y": "Yttrium", "Zr": "Zirkonium",
+        "Nb": "Niobium", "Mo": "Molybdeen", "Tc": "Technetium", "Ru": "Ruthenium",
+        "Rh": "Rhodium", "Pd": "Palladium", "Ag": "Zilver", "Cd": "Cadmium",
+        "In": "Indium", "Sn": "Tin", "Sb": "Antimoon", "Te": "Tellurium",
+        "I": "Jodium", "Xe": "Xenon", "Cs": "Cesium", "Ba": "Barium",
+        "Hf": "Hafnium", "Ta": "Tantaal", "W": "Wolfraam", "Re": "Renium",
+        "Os": "Osmium", "Ir": "Iridium", "Pt": "Platina", "Au": "Goud",
+        "Hg": "Kwik", "Tl": "Thallium", "Pb": "Lood", "Bi": "Bismut",
+        "Po": "Polonium", "At": "Astaat", "Rn": "Radon"
+    };
 
-    </div>
-</div>
-<div id="leaderboard" style="margin-top: 30px;">
-    <h2>Top Scores</h2>
-    <table id="scoreboard" style="margin: 0 auto; border-collapse: collapse; width: 100%; max-width: 600px;">
-        <thead>
-        <tr>
-            <th>Naam</th>
-            <th>Score</th>
-        </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-</div>
+    const elements = Object.keys(elementsData);
 
+    const combinations = {
+        "H,O": {"name": "Water", "formula": "H₂O"},
+        "C,O": {"name": "Koolstofdioxide", "formula": "CO₂"},
+        "Na,Cl": {"name": "Keukenzout", "formula": "NaCl"},
+        "Fe,O": {"name": "IJzeroxide", "formula": "Fe₂O₃"},
+        "Fe,C": {"name": "Staal", "formula": "Fe+C (legering)"},
+        "Cu,Zn": {"name": "Messing", "formula": "Cu+Zn (legering)"},
+        "H,N": {"name": "Ammoniak", "formula": "NH₃"},
+        "C,H": {"name": "Methaan", "formula": "CH₄"},
+        "H,Cl": {"name": "Waterstofchloride", "formula": "HCl"},
+        "Mg,O": {"name": "Magnesiumoxide", "formula": "MgO"},
+        "K,Cl": {"name": "Kaliumchloride", "formula": "KCl"},
+        "Zn,O": {"name": "Zinkoxide", "formula": "ZnO"},
+        "Ag,Br": {"name": "Zilverbromide", "formula": "AgBr"},
+        "Ti,O": {"name": "Titaandioxide", "formula": "TiO₂"},
+        "C,H,O": {"name": "Glucose", "formula": "C₆H₁₂O₆"},
+        "Ca,C,O": {"name": "Calciumcarbonaat", "formula": "CaCO₃"},
+        "N,H,O": {"name": "Salpeterzuur", "formula": "HNO₃"},
+        "Na,H,C,O": {"name": "Natriumbicarbonaat", "formula": "NaHCO₃"},
+        "Ba,O,S": {"name": "Bariumsulfaat", "formula": "BaSO₄"},
+        "Al,O": {"name": "Aluminiumoxide", "formula": "Al₂O₃"},
+        "Si,O": {"name": "Silica", "formula": "SiO₂"},
+        "S,O": {"name": "Zwaveldioxide", "formula": "SO₂"},
+        "Pb,O": {"name": "Loodoxide", "formula": "PbO"},
+        "Hg,Cl": {"name": "Kwikchloride", "formula": "HgCl₂"},
+        "Au,Ag": {"name": "Elektrum", "formula": "Au+Ag (legering)"},
+        "Ni,Cr": {"name": "Nichroom", "formula": "Ni+Cr (legering)"},
+        "Cu,Sn": {"name": "Brons", "formula": "Cu+Sn (legering)"},
+        "W,C": {"name": "Wolfraamcarbide", "formula": "WC"},
+    };
 
-    <script>
-      // Elementen en combinaties
-      const elements = [
-        "H",
-        "He",
-        "Li",
-        "Be",
-        "B",
-        "C",
-        "N",
-        "O",
-        "F",
-        "Ne",
-        "Na",
-        "Mg",
-        "Al",
-        "Si",
-        "P",
-        "S",
-        "Cl",
-        "Ar",
-        "K",
-        "Ca",
-        "Sc",
-        "Ti",
-        "V",
-        "Cr",
-        "Mn",
-        "Fe",
-        "Co",
-        "Ni",
-        "Cu",
-        "Zn",
-        "Ga",
-        "Ge",
-        "As",
-        "Se",
-        "Br",
-        "Kr",
-        "Rb",
-        "Sr",
-        "Y",
-        "Zr",
-        "Nb",
-        "Mo",
-        "Tc",
-        "Ru",
-        "Rh",
-        "Pd",
-        "Ag",
-        "Cd",
-        "In",
-        "Sn",
-        "Sb",
-        "Te",
-        "I",
-        "Xe",
-        "Cs",
-        "Ba",
-        "Hf",
-        "Ta",
-        "W",
-        "Re",
-        "Os",
-        "Ir",
-        "Pt",
-        "Au",
-        "Hg",
-        "Tl",
-        "Pb",
-        "Bi",
-        "Po",
-        "At",
-        "Rn",
-      ];
+    // Quiz variables
+    let playerName = "";
+    let quizEnded = false;
+    let selected = [];
+    let currentQuestion = {};
+    let score = 0;
+    let lives = 3;
+    let timeLeft = 30;
+    let timer;
+    let questionsAnswered = 0;
+    const totalQuestions = 10;
 
-      const combinations = {
-        "H,O": { name: "Water" },
-        "C,O": { name: "Koolstofdioxide" },
-        "Na,Cl": { name: "Keukenzout" },
-        "Fe,O": { name: "IJzeroxide" },
-        "Fe,C": { name: "Staal" }, // Legering
-        "Cu,Zn": { name: "Messing" },
-        "H,N": { name: "Ammoniak" },
-        "C,H": { name: "Methaan" },
-        "H,Cl": { name: "Waterstofchloride" },
-        "Mg,O": { name: "Magnesiumoxide" },
-        "K,Cl": { name: "Kaliumchloride" },
-        "Zn,O": { name: "Zinkoxide" },
-        "Ag,Br": { name: "Zilverbromide" },
-        "Ti,O": { name: "Titaandioxide" },
-        "C,H,O": { name: "Glucose" },
-        "Ca,C,O": { name: "Calciumcarbonaat" },
-        "N,H,O": { name: "Salpeterzuur" },
-        "Na,H,C,O": { name: "Natriumbicarbonaat" },
-        "Ba,O,S": { name: "Bariumsulfaat" },
-        "Al,O": { name: "Aluminiumoxide" },
-        "Si,O": { name: "Silica" },
-        "S,O": { name: "Zwaveldioxide" },
-        "Pb,O": { name: "Loodoxide" },
-        "Hg,Cl": { name: "Kwikchloride" },
-        "Au,Ag": { name: "Elektrum" }, // Legering
-        "Ni,Cr": { name: "Nichroom" }, // Legering
-        "Cu,Sn": { name: "Brons" }, // Legering
-        "W,C": { name: "Wolfraamcarbide" },
-      };
-
-      // Quiz variabelen
-      let playerName = "";
-      let quizEnded = false;
-      let selected = [];
-      let currentQuestion = {};
-      let score = 0;
-      let lives = 3;
-      let timeLeft = 30;
-      let timer;
-      let questionsAnswered = 0;
-      const totalQuestions = 10;
-
-      // Elementen grid opbouwen
-      const grid = document.getElementById("elementGrid");
-      elements.forEach((el) => {
-
+    // Initialize element grid
+    const grid = document.getElementById("elementGrid");
+    elements.forEach(el => {
         const div = document.createElement("div");
-        div.className = "element";
+        div.className = "element element-tooltip";
         div.textContent = el;
         div.dataset.symbol = el;
+        div.dataset.name = elementsData[el];
         div.addEventListener("click", () => {
             if (div.classList.contains("disabled")) return;
 
@@ -408,30 +642,30 @@
                 selected.splice(i, 1);
                 div.classList.remove("selected");
             } else {
-                selected.push(symbol);
-                div.classList.add("selected");
+                if (selected.length < 4) { // Limit selection to 4 elements max
+                    selected.push(symbol);
+                    div.classList.add("selected");
+                }
             }
         });
         grid.appendChild(div);
     });
 
-      // Startscherm
-      document.getElementById("startButton").addEventListener("click", () => {
+    // Start screen
+    document.getElementById("startButton").addEventListener("click", () => {
         const input = document.getElementById("playerName").value.trim();
         if (input === "") {
-          alert("Vul eerst je naam in!");
-          return;
+            alert("Vul eerst je naam in!");
+            return;
         }
         playerName = input;
         document.getElementById("startScreen").style.display = "none";
         document.getElementById("quizArea").style.display = "block";
-        setLeaderboardColor("dark");
-
         startQuiz();
     });
 
-      // Quiz functies
-      function startQuiz() {
+    // Quiz functions
+    function startQuiz() {
         quizEnded = false;
         score = 0;
         lives = 3;
@@ -441,26 +675,25 @@
         nextQuestion();
     }
 
-      function nextQuestion() {
+    function nextQuestion() {
         selected = [];
         document.querySelectorAll(".element").forEach((el) => {
             el.classList.remove("selected", "disabled");
         });
 
         const comboKeys = Object.keys(combinations);
-        const randomKey =
-            comboKeys[Math.floor(Math.random() * comboKeys.length)];
+        const randomKey = comboKeys[Math.floor(Math.random() * comboKeys.length)];
         currentQuestion = {
             answer: randomKey.split(","),
             name: combinations[randomKey].name,
+            formula: combinations[randomKey].formula
         };
 
         const aantal = currentQuestion.answer.length;
-        document.getElementById(
-            "question"
-        ).textContent = `Welke elementen vormen ${
-            currentQuestion.name
-        }? (Selecteer ${aantal} element${aantal > 1 ? "en" : ""})`;
+        document.getElementById("question").innerHTML = `
+            <div style="font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; color: var(--primary)">${currentQuestion.name}</div>
+            <div style="font-size: 1rem;">Selecteer ${aantal} element${aantal > 1 ? "en" : ""} dat deze stof vormt:</div>
+        `;
 
         resetTimer();
         startTimer();
@@ -486,21 +719,23 @@
     }
 
     function updateTimer() {
-        document.getElementById("timer").textContent = `Tijd: ${timeLeft}s`;
+        document.getElementById("timer").textContent = `${timeLeft}s`;
         if (timeLeft <= 10) {
-            document.getElementById("timer").style.color = "red";
+            document.getElementById("timer").style.color = "var(--danger)";
+            document.getElementById("timer").style.fontWeight = "600";
         } else {
-            document.getElementById("timer").style.color = "black";
+            document.getElementById("timer").style.color = "inherit";
+            document.getElementById("timer").style.fontWeight = "inherit";
         }
     }
 
     function updateScore() {
-        document.getElementById("score").textContent = `Score: ${score}`;
+        document.getElementById("score").textContent = score;
     }
 
     function updateLives() {
         const livesElement = document.getElementById("lives");
-        livesElement.innerHTML = "Levens: ";
+        livesElement.innerHTML = "";
         for (let i = 0; i < 3; i++) {
             const heart = document.createElement("span");
             heart.className = "life";
@@ -511,11 +746,10 @@
 
     function timeUp() {
         clearInterval(timer);
-        document.getElementById(
-            "result"
-        ).innerHTML = `Tijd is om! Het juiste antwoord was: <span id="correctAnswer">${currentQuestion.answer.join(
-            " + "
-        )}</span>`;
+        document.getElementById("result").innerHTML = `
+            <div style="color: var(--danger); margin-bottom: 10px;">⏰ Tijd is om!</div>
+            <div>Het juiste antwoord was: <span id="correctAnswer">${currentQuestion.answer.join(" + ")}</span></div>
+        `;
         loseLife();
     }
 
@@ -529,112 +763,165 @@
         const correctAnswer = [...currentQuestion.answer].sort().join(",");
 
         if (userAnswer === correctAnswer) {
-            score += timeLeft;
+            score += timeLeft * 1.5; // Bonus for speed
             questionsAnswered++;
-            document.getElementById("result").innerHTML = "Correct! 🎉";
+            document.getElementById("result").innerHTML = `
+                <div style="color: var(--success); font-weight: 600;">✅ Correct! +${Math.round(timeLeft * 1.5)} punten</div>
+            `;
             updateScore();
+
+            // Visual feedback
+            selected.forEach(symbol => {
+                const el = document.querySelector(`.element[data-symbol="${symbol}"]`);
+                if (el) {
+                    el.classList.add("disabled");
+                    el.style.animation = "pulse 0.5s";
+                    setTimeout(() => el.style.animation = "", 500);
+                }
+            });
         } else {
-            document.getElementById(
-                "result"
-            ).innerHTML = `Helaas, fout. Het juiste antwoord was: <span id="correctAnswer">${currentQuestion.answer.join(
-                " + "
-            )}</span>`;
+            document.getElementById("result").innerHTML = `
+                <div style="color: var(--danger); margin-bottom: 10px;">❌ Helaas, fout.</div>
+                <div>Het juiste antwoord was: <span id="correctAnswer">${currentQuestion.answer.join(" + ")}</span></div>
+            `;
             loseLife();
         }
 
         if (lives > 0 && questionsAnswered < totalQuestions) {
-          setTimeout(nextQuestion, 2000);
+            setTimeout(nextQuestion, 2000);
+        } else {
+            setTimeout(endQuiz, 2000);
         }
-      }
+    }
 
     function loseLife() {
         lives--;
         updateLives();
+
+        // Visual feedback for wrong answer
+        selected.forEach(symbol => {
+            const el = document.querySelector(`.element[data-symbol="${symbol}"]`);
+            if (el) {
+                el.style.animation = "shake 0.5s";
+                setTimeout(() => el.style.animation = "", 500);
+            }
+        });
+
         if (lives <= 0) {
             endQuiz();
         }
     }
 
-      function endQuiz() {
+    function endQuiz() {
         if (quizEnded) return;
         quizEnded = true;
         clearInterval(timer);
         document.getElementById("quizArea").style.display = "none";
-        setLeaderboardColor("dark"); // wit
-        document.getElementById("endScreen").style.display = "flex";
-        document.getElementById(
-            "finalScore"
-        ).textContent = `Je eindscore: ${score}`;
+        document.getElementById("endScreen").style.display = "block";
 
-        const maxScore = totalQuestions * 30;
-        const percentage = (score / maxScore) * 100;
+        const maxScore = totalQuestions * 45; // 30 * 1.5 (max points per question)
+        const percentage = Math.min(100, Math.round((score / maxScore) * 100));
+
+        document.getElementById("finalScore").textContent = `Je eindscore: ${score}`;
+        document.getElementById("finalProgress").style.width = `${percentage}%`;
+
         let message = "";
-
-        if (percentage >= 80)
-            message = "Uitstekend! Je kent je chemische combinaties heel goed!";
-        else if (percentage >= 60)
-            message = "Goed gedaan! Met wat meer oefening word je nog beter!";
-        else if (percentage >= 40)
-            message = "Niet slecht, maar je kunt nog wat meer oefenen!";
-        else message = "Blijf oefenen, je wordt vanzelf beter!";
-
+        if (percentage >= 80) {
+            message = "Uitstekend! Je bent een chemie-expert!";
+        } else if (percentage >= 60) {
+            message = "Goed gedaan! Je kent je chemische combinaties goed!";
+        } else if (percentage >= 40) {
+            message = "Niet slecht! Met wat meer oefening word je nog beter!";
+        } else {
+            message = "Blijf oefenen! Chemie wordt leuker naarmate je meer leert!";
+        }
         document.getElementById("finalMessage").textContent = message;
 
-        console.log("Verstuur naar database:", playerName, score);
+        // Save score to leaderboard
+        saveScore();
+    }
 
+    function saveScore() {
         fetch("https://chem-edu-quest.vercel.app/api/save-score", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: playerName,
-            score: score,
-          }),
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: playerName,
+                score: score
+            })
         })
-          .then((res) => res.json())
-          .then((data) => {
-            console.log("Respons van API:", data);
-            loadLeaderboard();
-          })
-          .catch((err) => console.error("Fout bij opslaan score:", err));
-      }
+            .then(res => res.json())
+            .then(data => {
+                console.log("Score saved:", data);
+                loadLeaderboard();
+            })
+            .catch(err => console.error("Error saving score:", err));
+    }
 
+    function loadLeaderboard() {
+        fetch("https://chem-edu-quest.vercel.app/api/get-score")
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.querySelector("#scoreboard tbody");
+                tbody.innerHTML = "";
+
+                if (data.length === 0) {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `<td colspan="2" style="text-align: center;">Nog geen scores</td>`;
+                    tbody.appendChild(row);
+                    return;
+                }
+
+                // Calculate progress bar for top score
+                const topScore = data[0].score;
+                const progressPercentage = Math.min(100, (topScore / (totalQuestions * 45)) * 100);
+                document.getElementById("leaderboardProgress").style.width = `${progressPercentage}%`;
+
+                data.slice(0, 5).forEach((entry, index) => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : ''} ${entry.name}</td>
+                        <td>${entry.score}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            })
+            .catch(err => {
+                console.error("Error loading leaderboard:", err);
+                const tbody = document.querySelector("#scoreboard tbody");
+                tbody.innerHTML = `<tr><td colspan="2">Kon leaderboard niet laden</td></tr>`;
+            });
+    }
+
+    // Restart button
     document.getElementById("restartButton").addEventListener("click", () => {
         document.getElementById("endScreen").style.display = "none";
         document.getElementById("quizArea").style.display = "block";
-        setLeaderboardColor("light"); // zwart
         startQuiz();
-      });
-      document
-        .getElementById("playgroundButton")
-        .addEventListener("click", function () {
-          window.location.href = "../Chemify/oefen.html";
-        });
+    });
 
-      function loadLeaderboard() {
-        fetch("https://chem-edu-quest.vercel.app/api/get-score")
+    // Playground button
+    document.getElementById("playgroundButton").addEventListener("click", function() {
+        window.location.href = "../Chemify/oefen.html";
+    });
 
-          .then((response) => response.json())
-          .then((data) => {
-            const tbody = document.querySelector("#scoreboard tbody");
-            tbody.innerHTML = "";
-            data.forEach((entry) => {
-              const row = document.createElement("tr");
-              row.innerHTML = `
+    // Initial load
+    window.addEventListener("load", () => {
+        loadLeaderboard();
 
-                    <td>${entry.name}</td>
-                    <td>${entry.score}</td>
-                `;
-              tbody.appendChild(row);
-            });
-          })
-          .catch((err) => {
-            console.error("Fout bij leaderboard:", err);
-          });
-      }
-    </script>
-    <a href="./index.html" id="playgroundButton">Playground</a>
-  </body>
+        // Add shake animation for wrong answers
+        const style = document.createElement("style");
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                20%, 60% { transform: translateX(-5px); }
+                40%, 80% { transform: translateX(5px); }
+            }
+        `;
+        document.head.appendChild(style);
+    });
+</script>
+</body>
 </html>
-
