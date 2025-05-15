@@ -176,10 +176,27 @@
     <div class="screen-content">
         <h1>Chemische Combinaties Quiz</h1>
         <p>Test je kennis van chemische combinaties!</p>
-        <p>Je krijgt een stof te zien en moet de juiste elementen selecteren.</p>
-        <p>Je hebt 3 levens en 30 seconden per vraag. Hoe meer vragen je correct beantwoordt, hoe hoger je score!</p>
+        <p>
+          Je krijgt een stof te zien en moet de juiste elementen selecteren.
+        </p>
+        <p>
+          Je hebt 3 levens en 30 seconden per vraag. Hoe meer vragen je correct
+          beantwoordt, hoe hoger je score!
+        </p>
         <p>Vul je naam in om te beginnen:</p>
-        <input type="text" id="playerName" placeholder="Jouw naam" required style="padding: 10px; font-size: 16px; border-radius: 5px; border: none; margin-bottom: 10px;">
+        <input
+          type="text"
+          id="playerName"
+          placeholder="Jouw naam"
+          required
+          style="
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            margin-bottom: 10px;
+          "
+        />
         <button class="screen-button" id="startButton">Start Quiz</button>
     </div>
 </div>
@@ -211,6 +228,32 @@
         <p id="finalScore">Je eindscore: 0</p>
         <p id="finalMessage">Goed gedaan!</p>
         <button class="screen-button" id="restartButton">Opnieuw Spelen</button>
+
+      </div>
+    </div>
+    <div id="leaderboard" style="margin-top: 30px">
+      <h2>Top Scores</h2>
+      <table
+        id="scoreboard"
+        style="
+          margin: 0 auto;
+          border-collapse: collapse;
+          width: 100%;
+          max-width: 600px;
+          background-color: white;
+          color: orange;
+        "
+      >
+        <thead>
+          <tr>
+            <th>Naam</th>
+            <th>Score</th>
+            <th>Datum</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
     </div>
 </div>
 <div id="leaderboard" style="margin-top: 30px;">
@@ -227,66 +270,130 @@
     </table>
 </div>
 
-</div>
 
-<script>
+    <script>
+      // Elementen en combinaties
+      const elements = [
+        "H",
+        "He",
+        "Li",
+        "Be",
+        "B",
+        "C",
+        "N",
+        "O",
+        "F",
+        "Ne",
+        "Na",
+        "Mg",
+        "Al",
+        "Si",
+        "P",
+        "S",
+        "Cl",
+        "Ar",
+        "K",
+        "Ca",
+        "Sc",
+        "Ti",
+        "V",
+        "Cr",
+        "Mn",
+        "Fe",
+        "Co",
+        "Ni",
+        "Cu",
+        "Zn",
+        "Ga",
+        "Ge",
+        "As",
+        "Se",
+        "Br",
+        "Kr",
+        "Rb",
+        "Sr",
+        "Y",
+        "Zr",
+        "Nb",
+        "Mo",
+        "Tc",
+        "Ru",
+        "Rh",
+        "Pd",
+        "Ag",
+        "Cd",
+        "In",
+        "Sn",
+        "Sb",
+        "Te",
+        "I",
+        "Xe",
+        "Cs",
+        "Ba",
+        "Hf",
+        "Ta",
+        "W",
+        "Re",
+        "Os",
+        "Ir",
+        "Pt",
+        "Au",
+        "Hg",
+        "Tl",
+        "Pb",
+        "Bi",
+        "Po",
+        "At",
+        "Rn",
+      ];
 
-    window.addEventListener("load", () => {
-        loadLeaderboard();
-        setLeaderboardColor("dark"); // wit
-    });
+      const combinations = {
+        "H,O": { name: "Water" },
+        "C,O": { name: "Koolstofdioxide" },
+        "Na,Cl": { name: "Keukenzout" },
+        "Fe,O": { name: "IJzeroxide" },
+        "Fe,C": { name: "Staal" }, // Legering
+        "Cu,Zn": { name: "Messing" },
+        "H,N": { name: "Ammoniak" },
+        "C,H": { name: "Methaan" },
+        "H,Cl": { name: "Waterstofchloride" },
+        "Mg,O": { name: "Magnesiumoxide" },
+        "K,Cl": { name: "Kaliumchloride" },
+        "Zn,O": { name: "Zinkoxide" },
+        "Ag,Br": { name: "Zilverbromide" },
+        "Ti,O": { name: "Titaandioxide" },
+        "C,H,O": { name: "Glucose" },
+        "Ca,C,O": { name: "Calciumcarbonaat" },
+        "N,H,O": { name: "Salpeterzuur" },
+        "Na,H,C,O": { name: "Natriumbicarbonaat" },
+        "Ba,O,S": { name: "Bariumsulfaat" },
+        "Al,O": { name: "Aluminiumoxide" },
+        "Si,O": { name: "Silica" },
+        "S,O": { name: "Zwaveldioxide" },
+        "Pb,O": { name: "Loodoxide" },
+        "Hg,Cl": { name: "Kwikchloride" },
+        "Au,Ag": { name: "Elektrum" }, // Legering
+        "Ni,Cr": { name: "Nichroom" }, // Legering
+        "Cu,Sn": { name: "Brons" }, // Legering
+        "W,C": { name: "Wolfraamcarbide" },
+      };
 
-    // Elementen en combinaties
-    const elements = ["H", "He", "Li", "Be", "B", "C", "N", "O", "F", "Ne", "Na", "Mg", "Al", "Si", "P", "S", "Cl", "Ar", "K", "Ca", "Sc", "Ti", "V", "Cr", "Mn", "Fe", "Co", "Ni", "Cu", "Zn", "Ga", "Ge", "As", "Se", "Br", "Kr", "Rb", "Sr", "Y", "Zr", "Nb", "Mo", "Tc", "Ru", "Rh", "Pd", "Ag", "Cd", "In", "Sn", "Sb", "Te", "I", "Xe", "Cs", "Ba", "Hf", "Ta", "W", "Re", "Os", "Ir", "Pt", "Au", "Hg", "Tl", "Pb", "Bi", "Po", "At", "Rn"];
+      // Quiz variabelen
+      let playerName = "";
+      let quizEnded = false;
+      let selected = [];
+      let currentQuestion = {};
+      let score = 0;
+      let lives = 3;
+      let timeLeft = 30;
+      let timer;
+      let questionsAnswered = 0;
+      const totalQuestions = 10;
 
-    const combinations = {
-        "H,O": {"name": "Water"},
-        "C,O": {"name": "Koolstofdioxide"},
-        "Na,Cl": {"name": "Keukenzout"},
-        "Fe,O": {"name": "IJzeroxide"},
-        "Fe,C": {"name": "Staal"}, // Legering
-        "Cu,Zn": {"name": "Messing"},
-        "H,N": {"name": "Ammoniak"},
-        "C,H": {"name": "Methaan"},
-        "H,Cl": {"name": "Waterstofchloride"},
-        "Mg,O": {"name": "Magnesiumoxide"},
-        "K,Cl": {"name": "Kaliumchloride"},
-        "Zn,O": {"name": "Zinkoxide"},
-        "Ag,Br": {"name": "Zilverbromide"},
-        "Ti,O": {"name": "Titaandioxide"},
-        "C,H,O": {"name": "Glucose"},
-        "Ca,C,O": {"name": "Calciumcarbonaat"},
-        "N,H,O": {"name": "Salpeterzuur"},
-        "Na,H,C,O": {"name": "Natriumbicarbonaat"},
-        "Ba,O,S": {"name": "Bariumsulfaat"},
-        "Al,O": {"name": "Aluminiumoxide"},
-        "Si,O": {"name": "Silica"},
-        "S,O": {"name": "Zwaveldioxide"},
-        "Pb,O": {"name": "Loodoxide"},
-        "Hg,Cl": {"name": "Kwikchloride"},
-        "Au,Ag": {"name": "Elektrum"}, // Legering
-        "Ni,Cr": {"name": "Nichroom"}, // Legering
-        "Cu,Sn": {"name": "Brons"}, // Legering
-        "W,C": {"name": "Wolfraamcarbide"},
+      // Elementen grid opbouwen
+      const grid = document.getElementById("elementGrid");
+      elements.forEach((el) => {
 
-    };
-
-
-    // Quiz variabelen
-    let playerName = "";
-    let quizEnded = false;
-    let selected = [];
-    let currentQuestion = {};
-    let score = 0;
-    let lives = 3;
-    let timeLeft = 30;
-    let timer;
-    let questionsAnswered = 0;
-    const totalQuestions = 10;
-
-    // Elementen grid opbouwen
-    const grid = document.getElementById("elementGrid");
-    elements.forEach(el => {
         const div = document.createElement("div");
         div.className = "element";
         div.textContent = el;
@@ -308,12 +415,12 @@
         grid.appendChild(div);
     });
 
-    // Startscherm
-    document.getElementById("startButton").addEventListener("click", () => {
+      // Startscherm
+      document.getElementById("startButton").addEventListener("click", () => {
         const input = document.getElementById("playerName").value.trim();
         if (input === "") {
-            alert("Vul eerst je naam in!");
-            return;
+          alert("Vul eerst je naam in!");
+          return;
         }
         playerName = input;
         document.getElementById("startScreen").style.display = "none";
@@ -323,10 +430,8 @@
         startQuiz();
     });
 
-
-
-    // Quiz functies
-    function startQuiz() {
+      // Quiz functies
+      function startQuiz() {
         quizEnded = false;
         score = 0;
         lives = 3;
@@ -336,8 +441,7 @@
         nextQuestion();
     }
 
-
-    function nextQuestion() {
+      function nextQuestion() {
         selected = [];
         document.querySelectorAll(".element").forEach((el) => {
             el.classList.remove("selected", "disabled");
@@ -439,11 +543,9 @@
         }
 
         if (lives > 0 && questionsAnswered < totalQuestions) {
-            setTimeout(nextQuestion, 2000);
+          setTimeout(nextQuestion, 2000);
         }
-
-    }
-
+      }
 
     function loseLife() {
         lives--;
@@ -453,7 +555,7 @@
         }
     }
 
-    function endQuiz() {
+      function endQuiz() {
         if (quizEnded) return;
         quizEnded = true;
         clearInterval(timer);
@@ -481,67 +583,58 @@
         console.log("Verstuur naar database:", playerName, score);
 
         fetch("https://chem-edu-quest.vercel.app/api/save-score", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                name: playerName,
-                score: score
-            })
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: playerName,
+            score: score,
+          }),
         })
-            .then(res => res.json())
-            .then(data => {
-                console.log("Respons van API:", data);
-                loadLeaderboard();
-            })
-            .catch(err => console.error("Fout bij opslaan score:", err));
-
-
-    }
-
+          .then((res) => res.json())
+          .then((data) => {
+            console.log("Respons van API:", data);
+            loadLeaderboard();
+          })
+          .catch((err) => console.error("Fout bij opslaan score:", err));
+      }
 
     document.getElementById("restartButton").addEventListener("click", () => {
         document.getElementById("endScreen").style.display = "none";
         document.getElementById("quizArea").style.display = "block";
         setLeaderboardColor("light"); // zwart
         startQuiz();
+      });
+      document
+        .getElementById("playgroundButton")
+        .addEventListener("click", function () {
+          window.location.href = "../Chemify/oefen.html";
+        });
 
-    });
-    document.getElementById("playgroundButton").addEventListener("click", function () {
-        window.location.href = "../Chemify/oefen.html";
-    });
-
-    function loadLeaderboard() {
+      function loadLeaderboard() {
         fetch("https://chem-edu-quest.vercel.app/api/get-score")
-            .then(response => response.json())
-            .then(data => {
-                const tbody = document.querySelector("#scoreboard tbody");
-                tbody.innerHTML = "";
-                data.slice(0, 5).forEach(entry => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
+
+          .then((response) => response.json())
+          .then((data) => {
+            const tbody = document.querySelector("#scoreboard tbody");
+            tbody.innerHTML = "";
+            data.forEach((entry) => {
+              const row = document.createElement("tr");
+              row.innerHTML = `
+
                     <td>${entry.name}</td>
                     <td>${entry.score}</td>
                 `;
-                    tbody.appendChild(row);
-                });
-            })
-            .catch(err => {
-                console.error("Fout bij leaderboard:", err);
+              tbody.appendChild(row);
             });
-        console.log("Top 5 scores geladen:", data.slice(0, 5));
-
-    }
-
-    function setLeaderboardColor(mode) {
-        const leaderboard = document.getElementById("leaderboard");
-        leaderboard.style.color = mode === "dark" ? "white" : "black";
-    }
-
-
-</script>
-<a href="./index.html" id="playgroundButton">Playground</a>
-
-</body>
+          })
+          .catch((err) => {
+            console.error("Fout bij leaderboard:", err);
+          });
+      }
+    </script>
+    <a href="./index.html" id="playgroundButton">Playground</a>
+  </body>
 </html>
+
