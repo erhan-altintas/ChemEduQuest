@@ -600,10 +600,6 @@
           name: "Rubidium-zilver-jodide (RbAg₄I₅)",
           use: "Vaste elektrolyt in speciale batterijen.",
         },
-        "C,O,Si": {
-          name: "Test1",
-          use: "Test2",
-        },
         "K,Na": {
           name: "NaK-legering",
           use: "Vloeibare metaallegering gebruikt als warmteoverdrager.",
@@ -616,33 +612,366 @@
           name: "Waterstoffluoride (HF)",
           use: "Gebruikt voor het etsen van glas, metaalbewerking en als grondstof voor fluorverbindingen.",
         },
+        "Li,Li": {
+          name: "Lithium (Li)",
+          use: "Gebruikt in batterijen en als legering.",
+        },
+        "Li,O": {
+          name: "Lithiumoxide (Li2O)",
+          use: "Gebruikt in batterijen en als luchtverfrisser.",
+        },
+        "Na,C": {
+          name: "Natriumcarbonaat (Na2CO3)",
+          use: "Gebruikt in de glasindustrie en als reinigingsmiddel.",
+        },
+        "Na,Cl": {
+          name: "Natriumchloride (NaCl)",
+          use: "Zout, gebruikt in voedsel en als onkruidverdelger.",
+        },
+        "Na,H": {
+          name: "Natriumhydride (NaH)",
+          use: "Gebruikt als sterk reductiemiddel.",
+        },
+        "Na,K": {
+          name: "Natriumkalium (NaK)",
+          use: "Legering, gebruikt in koelprocessen.",
+        },
+        "Na,O": {
+          name: "Natriumoxide (Na2O)",
+          use: "Gebruikt in de productie van glas en keramiek.",
+        },
+        "K,Cl": {
+          name: "Kaliumchloride (KCl)",
+          use: "Gebruikt als meststof en in de chemische industrie.",
+        },
+        "K,Na": {
+          name: "Kaliumnatrimetaal (KNa)",
+          use: "Legering, gebruikt in koelprocessen.",
+        },
+        "K,O": {
+          name: "Kaliumoxide (K2O)",
+          use: "Gebruikt in de productie van glas.",
+        },
+        "Rb,Ag": {
+          name: "Rubidiumzilver (RbAg)",
+          use: "Gebruikt in spectroscopie.",
+        },
+        "Rb,I": {
+          name: "Rubidiumjodide (RbI)",
+          use: "Gebruikt in fotofysica.",
+        },
+        "Rb,Rb": { name: "Rubidium (Rb)", use: "Gebruikt in kernreactoren." },
+        "Cs,Cs": {
+          name: "Cesium (Cs)",
+          use: "Gebruikt in kernreactoren en bij het meten van tijd.",
+        },
+        "Be,O": {
+          name: "Berylliumoxide (BeO)",
+          use: "Gebruikt in elektronica en als isolator.",
+        },
+        "Be,Be": {
+          name: "Beryllium (Be)",
+          use: "Gebruikt in de luchtvaartindustrie.",
+        },
+        "Mg,O": {
+          name: "Magnesiumoxide (MgO)",
+          use: "Gebruikt in de bouw en als brandwerend materiaal.",
+        },
+        "Mg,Mg": {
+          name: "Magnesium (Mg)",
+          use: "Gebruikt in legeringen voor vliegtuigen en auto's.",
+        },
+        "Ca,C": {
+          name: "Calciumcarbonaat (CaCO3)",
+          use: "Gebruikt in de bouw en als antacidum.",
+        },
+        "Ca,F": {
+          name: "Calciumfluoride (CaF2)",
+          use: "Gebruikt in de glasindustrie.",
+        },
+        "Ca,O": {
+          name: "Calciumoxide (CaO)",
+          use: "Gebruikt in de productie van cement.",
+        },
+        "Sr,Sr": {
+          name: "Strontium (Sr)",
+          use: "Gebruikt in vuurwerk en bij het maken van magneten.",
+        },
+        "Ba,O": {
+          name: "Bariumoxide (BaO)",
+          use: "Gebruikt in de productie van glas en als vacuümverlichting.",
+        },
+        "Fe,C": {
+          name: "Ijzercarbide (Fe3C)",
+          use: "Gebruikt in staalproductie.",
+        },
+        "Fe,O": {
+          name: "Ijzeroxide (Fe2O3)",
+          use: "Gebruikt in verf en als roest.",
+        },
+        "Fe,S": {
+          name: "Ijzer(II)sulfide (FeS)",
+          use: "Gebruikt als katalysator.",
+        },
+        "Cu,O": {
+          name: "Koperoxide (CuO)",
+          use: "Gebruikt als katalysator en in batterijen.",
+        },
+        "Cu,Sn": {
+          name: "Brons (CuSn)",
+          use: "Legering, gebruikt in scheepsbouw en gereedschappen.",
+        },
+        "Cu,Zn": {
+          name: "Messing (CuZn)",
+          use: "Legering, gebruikt in de constructie van instrumenten.",
+        },
+        "Zn,O": {
+          name: "Zinkoxide (ZnO)",
+          use: "Gebruikt in zonnebrandcrème en rubberproductie.",
+        },
+        "Zn,S": {
+          name: "Zinksulfide (ZnS)",
+          use: "Gebruikt in gloeilampen en als pigment.",
+        },
+        "Hg,Cl": {
+          name: "Kwikchloride (HgCl2)",
+          use: "Gebruikt als desinfectiemiddel en in de chemische industrie.",
+        },
+        "Hg,S": {
+          name: "Kwik(II)sulfide (HgS)",
+          use: "Gebruikt in thermometers en als rode pigmenten.",
+        },
+        "Al,Cu": {
+          name: "Aluminiumkoper (AlCu)",
+          use: "Legering, gebruikt in luchtvaart en elektronica.",
+        },
+        "Al,O": {
+          name: "Aluminiumoxide (Al2O3)",
+          use: "Gebruikt in slijpmiddelen en als isolator.",
+        },
+        "Al,Al": {
+          name: "Aluminium (Al)",
+          use: "Veelzijdig metaal, gebruikt in de bouw, luchtvaart en verpakking.",
+        },
+        "Ga,Ga": {
+          name: "Gallium (Ga)",
+          use: "Gebruikt in halfgeleiders en LED's.",
+        },
+        "Sn,Cd": { name: "SnCd-legaing (SnCd)", use: "Gebruikt in solderen." },
+        "Sn,Cu": {
+          name: "Bronzenlegering (CuSn)",
+          use: "Legering, gebruikt in gereedschappen en scheepsbouw.",
+        },
+        "Sn,Sn": {
+          name: "Tin (Sn)",
+          use: "Gebruikt in solderen, blikken en legeringen.",
+        },
+        "Pb,Cl": {
+          name: "Loodchloride (PbCl2)",
+          use: "Gebruikt in de chemische industrie.",
+        },
+        "Pb,O": {
+          name: "Loodoxide (PbO)",
+          use: "Gebruikt in batterijen en als pigment.",
+        },
+        "B,O": {
+          name: "Booroxide (B2O3)",
+          use: "Gebruikt in de glasindustrie.",
+        },
+        "Si,C": {
+          name: "Siliciumcarbide (SiC)",
+          use: "Gebruikt in slijp- en snijgereedschap.",
+        },
+        "Si,O": {
+          name: "Siliciumoxide (SiO2)",
+          use: "Gebruikt in de elektronica en glasproductie.",
+        },
+        "N,H": {
+          name: "Ammoniak (NH3)",
+          use: "Gebruikt in kunstmestproductie en koelsystemen.",
+        },
+        "N,O": {
+          name: "Stikstofdioxide (NO2)",
+          use: "Gebruikt in de chemische industrie.",
+        },
+        "O,O": {
+          name: "Zuurstof (O2)",
+          use: "Essentieel voor ademhaling, brandstofverbranding.",
+        },
+        "P,O": {
+          name: "Fosforoxide (P4O10)",
+          use: "Gebruikt in de productie van fosforzuur.",
+        },
+        "S,Ba": {
+          name: "Bariumsulfide (BaS)",
+          use: "Gebruikt in de chemische industrie.",
+        },
+        "S,Fe": {
+          name: "Ijzer(III)sulfide (Fe2S3)",
+          use: "Gebruikt als katalysator.",
+        },
+        "S,Hg": {
+          name: "Kwik(II)sulfide (HgS)",
+          use: "Gebruikt in de pigmentindustrie.",
+        },
+        "Cl,C": {
+          name: "Koolstofchloride (CCl4)",
+          use: "Gebruikt als oplosmiddel.",
+        },
+        "Cl,H": {
+          name: "Waterstofchloride (HCl)",
+          use: "Gebruikt in de chemische industrie en als reinigingsmiddel.",
+        },
+        "Cl,Na": {
+          name: "Natriumchloride (NaCl)",
+          use: "Zout, gebruikt in voedsel en als onkruidverdelger.",
+        },
+        "Br,Ag": {
+          name: "Zilverbromide (AgBr)",
+          use: "Gebruikt in de fotografie.",
+        },
+        "I,Ag": {
+          name: "Zilverjodide (AgI)",
+          use: "Gebruikt in de fotografie en sneeuwvorming.",
+        },
+        "Xe,Xe": {
+          name: "Xenon (Xe)",
+          use: "Gebruikt in verlichting en medische toepassingen.",
+        },
+        "Rn,Rn": {
+          name: "Radon (Rn)",
+          use: "Radioactief gas, gebruikt in sommige medische behandelingen.",
+        },
+        "U,O": {
+          name: "Uraniumoxide (UO2)",
+          use: "Gebruikt als brandstof in kernreactoren.",
+        },
+        // Two-element combinations
+        "Li,O": {
+          name: "Lithiumoxide (Li2O)",
+          use: "Gebruikt in batterijen en als luchtverfrisser.",
+        },
+        "Li,Li": {
+          name: "Lithium (Li)",
+          use: "Gebruikt in batterijen en als legering.",
+        },
+        "Na,C": {
+          name: "Natriumcarbonaat (Na2CO3)",
+          use: "Gebruikt in de glasindustrie en als reinigingsmiddel.",
+        },
+        "Na,Cl": {
+          name: "Natriumchloride (NaCl)",
+          use: "Zout, gebruikt in voedsel en als onkruidverdelger.",
+        },
+        "Na,H": {
+          name: "Natriumhydride (NaH)",
+          use: "Gebruikt als sterk reductiemiddel.",
+        },
+        "Na,O": {
+          name: "Natriumoxide (Na2O)",
+          use: "Gebruikt in de productie van glas en keramiek.",
+        },
+        "K,Cl": {
+          name: "Kaliumchloride (KCl)",
+          use: "Gebruikt als meststof en in de chemische industrie.",
+        },
+        "Rb,Ag": {
+          name: "Rubidiumzilver (RbAg)",
+          use: "Gebruikt in spectroscopie.",
+        },
+        "Be,O": {
+          name: "Berylliumoxide (BeO)",
+          use: "Gebruikt in elektronica en als isolator.",
+        },
+        "Fe,O": {
+          name: "Ijzeroxide (Fe2O3)",
+          use: "Gebruikt in verf en als roest.",
+        },
+        "Cu,O": {
+          name: "Koperoxide (CuO)",
+          use: "Gebruikt als katalysator en in batterijen.",
+        },
+        "Zn,O": {
+          name: "Zinkoxide (ZnO)",
+          use: "Gebruikt in zonnebrandcrème en rubberproductie.",
+        },
+        "Hg,Cl": {
+          name: "Kwikchloride (HgCl2)",
+          use: "Gebruikt als desinfectiemiddel en in de chemische industrie.",
+        },
+        "Al,Cu": {
+          name: "Aluminiumkoper (AlCu)",
+          use: "Legering, gebruikt in luchtvaart en elektronica.",
+        },
+        "Ga,Ga": {
+          name: "Gallium (Ga)",
+          use: "Gebruikt in halfgeleiders en LED's.",
+        },
+        "Si,O": {
+          name: "Siliciumoxide (SiO2)",
+          use: "Gebruikt in de elektronica en glasproductie.",
+        },
+
+        // Three-element combinations
+        "Zn,S,O": {
+          name: "Zinksulfaat (ZnSO4)",
+          use: "Gebruikt in meststoffen, als een zinkbron voor voedingssupplementen, en in de behandeling van huidziekten.",
+        },
+        "Na,O,K": {
+          name: "Natrium-kaliummetaal (NaK)",
+          use: "Legering, gebruikt in koelprocessen.",
+        },
+        "Fe,C,O": {
+          name: "Ijzercarbide (Fe3C)",
+          use: "Gebruikt in staalproductie.",
+        },
+        "Cu,Zn,O": {
+          name: "Koperzinkoxide (CuZnO)",
+          use: "Gebruikt als katalysator in de chemische industrie.",
+        },
+        "Al,Cu,O": {
+          name: "Aluminiumkoperoxide (AlCuO)",
+          use: "Legering, gebruikt in de luchtvaartindustrie.",
+        },
+        "Pb,Cl,O": {
+          name: "Loodchlorideoxide (PbCl2O)",
+          use: "Gebruikt in de chemische industrie voor productie van loodverbindingen.",
+        },
+        "C,O,Si": {
+          name: "Siliciumcarbonaat (SiCO3)",
+          use: "Gebruikt in de glasindustrie.",
+        },
+        "O,S,Zn": {
+          name: "Zinksulfaat (ZnSO4)",
+          use: "Gebruikt in meststoffen, als een zinkbron voor voedingssupplementen, en in de behandeling van huidziekten.",
+        },
       };
 
       // Valid combinations voor filtering
       const validCombinations = {
         //Alkalimetalen
-        Li: ["O"],
-        Na: ["C", "Cl", "H", "O", "K"],
-        K: ["Cl", "Na", "O"],
-        Rb: ["Ag", "I"],
+        Li: ["O", "Li"],
+        Na: ["C", "Cl", "H", "O", "K", "Na"],
+        K: ["Cl", "Na", "O", "K"],
+        Rb: ["Ag", "I", "Rb"],
         Cs: ["Cs"],
         //Aardalkalimetalen
-        Be: ["O"],
-        Mg: ["O"],
-        Ca: ["C", "F", "O"],
+        Be: ["O", "Be"],
+        Mg: ["O", "Mg"],
+        Ca: ["C", "F", "O", "Ca"],
         Sr: ["Sr"],
-        Ba: ["O", "S"],
+        Ba: ["O", "S", "Ba"],
         //Overgangsmetalen
         Sc: ["Sc"],
-        Ti: ["O"],
+        Ti: ["O", "Ti"],
         V: ["V"],
-        Cr: ["Ni"],
-        Mn: ["O"],
-        Fe: ["C", "O", "S"],
-        Co: ["O"],
-        Ni: ["Cr"],
-        Cu: ["O", "Sn", "Zn", "Al"],
-        Zn: ["Cu", "O", "S"],
+        Cr: ["Ni", "Cr"],
+        Mn: ["O", "Mn"],
+        Fe: ["C", "O", "S", "Fe"],
+        Co: ["O", "Co"],
+        Ni: ["Cr", "Ni"],
+        Cu: ["O", "Sn", "Zn", "Al", "Cu"],
+        Zn: ["Cu", "O", "S", "P", "Zn"],
         Y: ["Y"],
         Zr: ["Zr"],
         Nb: ["Nb"],
@@ -651,37 +980,37 @@
         Ru: ["Ru"],
         Rh: ["Rh"],
         Pd: ["Pd"],
-        Ag: ["Br", "S", "Rb", "I"],
-        Cd: ["Bi", "Pb", "Sn"],
+        Ag: ["Br", "S", "Rb", "I", "Ag"],
+        Cd: ["Bi", "Pb", "Sn", "Cd"],
         Hf: ["Hf"],
         Ta: ["Ta"],
-        W: ["C"],
+        W: ["C", "W"],
         Re: ["Re"],
         Os: ["Os"],
         Ir: ["Ir"],
         Pt: ["Pt"],
-        Au: ["Ag"],
-        Hg: ["Cl", "S"],
+        Au: ["Ag", "Au"],
+        Hg: ["Cl", "S", "Hg"],
         //Hoofdgroepmetalen
-        Al: ["Cu", "O"],
+        Al: ["Cu", "O", "Al"],
         Ga: ["Ga"],
         In: ["In"],
-        Sn: ["Bi", "Pb", "Cd", "Cu", "O"],
+        Sn: ["Bi", "Pb", "Cd", "Cu", "O", "Sn"],
         Tl: ["Tl"],
-        Pb: ["Cl", "O", "C", "H"],
-        Bi: ["Pb", "Sn", "Cd"],
+        Pb: ["Cl", "O", "C", "H", "Sn", "Bi", "Cd", "Pb"],
+        Bi: ["Pb", "Sn", "Cd", "Bi"],
         //Metalloïden
-        B: ["O"],
-        Si: ["C", "O"],
+        B: ["O", "B"],
+        Si: ["C", "O", "Si"],
         Ge: ["Ge"],
         As: ["As"],
         Sb: ["Sb"],
         Te: ["Te"],
         Po: ["Po"],
         //Niet-metalen
-        H: ["C", "Cl", "N", "Na", "O", "S", "F"],
-        C: ["Ca", "Cl", "Fe", "H", "N", "Na", "O", "Si", "W"],
-        N: ["H", "O", "C"],
+        H: ["C", "Cl", "N", "Na", "O", "S", "F", "Pb", "H"],
+        C: ["Ca", "Cl", "Fe", "H", "N", "Na", "O", "Si", "W", "Pb", "C"],
+        N: ["H", "O", "C", "N"],
         O: [
           "Al",
           "Ba",
@@ -707,15 +1036,16 @@
           "Ti",
           "U",
           "Zn",
+          "O",
         ],
-        P: ["O"],
-        S: ["Ba", "Fe", "H", "Hg", "O", "Zn"],
+        P: ["O", "P"],
+        S: ["Ba", "Fe", "H", "Hg", "O", "Zn", "Ag", "S"],
         Se: ["Se"],
         //Halogenen
-        F: ["Ca"],
-        Cl: ["C", "H", "Hg", "K", "Na", "Pb"],
-        Br: ["Ag"],
-        I: ["Ag", "Rb"],
+        F: ["Ca", "H", "F"],
+        Cl: ["C", "H", "Hg", "K", "Na", "Pb", "Cl"],
+        Br: ["Ag", "Br"],
+        I: ["Ag", "Rb", "I"],
         At: ["At"],
         //Edelgassen
         He: ["He"],
@@ -726,7 +1056,7 @@
         Rn: ["Rn"],
         //Lanthaniden
         //Actiniden
-        U: ["O"],
+        U: ["O", "U"],
       };
 
       const selected = [];
